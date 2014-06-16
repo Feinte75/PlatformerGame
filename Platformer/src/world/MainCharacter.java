@@ -36,11 +36,12 @@ public class MainCharacter {
             movement = Movement.JUMPING;
 		}			
 	}
-	
-	public void stopJump(){
+
+	/*
+    public void stopJump(){
 		if(velocityY < -6.0f)velocityY = -6.0f;
 		System.out.println("Stop jump !");
-	}
+	}*/
 
     public void update(float gravity){
 
@@ -57,21 +58,21 @@ public class MainCharacter {
         if(onGround && movement == Movement.JUMPING) movement = Movement.IDLE;
     }
 
-	public void setX(int x) {
-		this.x = x;
-	}
+    public int getX() {
+        return x;
+    }
 
-	public void setY(int y) {
-		this.y = y;
-	}
+    public void setX(int x) {
+        this.x = x;
+    }
 
-	public int getX() {
-		return x;
-	}
-	
-	public int getY(){
-		return y;
-	}
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
 
 	public Movement getMovement() {
 		return movement;

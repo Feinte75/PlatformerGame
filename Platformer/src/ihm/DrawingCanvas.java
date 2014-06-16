@@ -1,32 +1,24 @@
 package ihm;
 
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.event.KeyEvent;
+import action.Command;
+import graphic.SpriteSheet;
+import input.InputHandler;
+import world.MainCharacter;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-import javax.swing.KeyStroke;
-
-import action.InputHandler;
-import action.SpriteSheet;
-import world.MainCharacter;
-import world.Movement;
-import action.JumpAction;
-import action.MoveAction;
-
 public class DrawingCanvas extends JPanel implements Runnable{
-	
-	private Thread thread;
-	private boolean playing = true;
 
+    float gravity;
+    MainCharacter character;
+    private Thread thread;
+    private boolean playing = true;
     // Input
     private InputHandler inputHandler;
-
     // Graphical variables
     private SpriteSheet ss;
     private BufferedImage run1;
@@ -37,10 +29,6 @@ public class DrawingCanvas extends JPanel implements Runnable{
     private BufferedImage run6;
     private BufferedImage jump1;
     private BufferedImage idle;
-
-	float gravity;
-	
-	MainCharacter character;
 	
 	
 	public DrawingCanvas(Dimension size){
@@ -118,9 +106,11 @@ public class DrawingCanvas extends JPanel implements Runnable{
 	 * Compute AI and update the world
 	 */
 	public void tick() {
-		
-		character.update(gravity);
-	}
+
+        Command command = inputHandler.handleInput();
+        if (command != null) command.execute(character);
+        character.update(gravity);
+    }
 	
 	/**
 	 * renders the world

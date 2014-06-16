@@ -1,32 +1,50 @@
 package action;
 
-import java.awt.event.ActionEvent;
-
+import input.Input;
+import input.InputEvent;
+import input.KeyboardManager;
+import listeners.InputListener;
 import world.MainCharacter;
+
+import java.awt.event.ActionEvent;
 
 public class JumpAction extends KeyboardManager implements Command{
 
 	private float velocityY;
-	
-	public JumpAction(float velocityY, MainCharacter character, boolean keyPressed){
-		super(character, keyPressed);
-		this.velocityY = velocityY;
-		this.character = character;
+
+    public JumpAction(float velocityY, boolean keyPressed) {
+        super(keyPressed);
+        this.velocityY = velocityY;
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-
-}
+        fireChangeEvent();
+    }
 
     @Override
-    public void execute() {
+    protected void fireChangeEvent() {
+
+        InputEvent evt;
+        evt = new InputEvent(Input.JUMP);
+
+        //else evt = new InputEvent(Input.JUMPRELEASED);
+
+        for (InputListener l : listeners) {
+            l.inputEvent(evt);
+        }
+    }
+
+    @Override
+    public void execute(MainCharacter character) {
 
         if(keyPressed){
+            System.out.println("Jump");
             character.jump(velocityY);
         }
-        else{
+        /*else{
+            System.out.println("Stop jumping");
             character.stopJump();
-        }
+        }*/
     }
 }

@@ -1,4 +1,4 @@
-package action;
+package graphic;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -20,17 +20,17 @@ public class SpriteSheet {
     private BufferedImage jump1;
     private BufferedImage idle;
 
-    public SpriteSheet(String path){
+    public SpriteSheet(String path) {
 
         loadImage(path);
-        jump1 = spriteSheet.getSubimage(1,1,27,45);
-        run1 = spriteSheet.getSubimage(1,49,42,34);
-        run2 = spriteSheet.getSubimage(46,49,41,34);
-        run3 = spriteSheet.getSubimage(90,49,31,34);
-        run4 = spriteSheet.getSubimage(124,49,36,34);
-        run5 = spriteSheet.getSubimage(163,49,35,34);
-        run6 = spriteSheet.getSubimage(201,49,35,34);
-        idle = spriteSheet.getSubimage(1,86,16,44);
+        jump1 = spriteSheet.getSubimage(1, 1, 27, 45);
+        run1 = spriteSheet.getSubimage(1, 49, 42, 34);
+        run2 = spriteSheet.getSubimage(46, 49, 41, 34);
+        run3 = spriteSheet.getSubimage(90, 49, 31, 34);
+        run4 = spriteSheet.getSubimage(124, 49, 36, 34);
+        run5 = spriteSheet.getSubimage(163, 49, 35, 34);
+        run6 = spriteSheet.getSubimage(201, 49, 35, 34);
+        idle = spriteSheet.getSubimage(1, 86, 16, 44);
     }
 
     public void loadImage(String path) {
