@@ -13,13 +13,14 @@ import java.awt.image.BufferedImage;
 
 public class DrawingCanvas extends JPanel implements Runnable{
 
-    float gravity;
+    float gravity = 1f;
     MainCharacter character;
     private Thread thread;
     private boolean playing = true;
     // Input
     private InputHandler inputHandler;
     // Graphical variables
+    private BufferedImage bufferImage;
     private SpriteSheet ss;
     private BufferedImage run1;
     private BufferedImage run2;
@@ -35,9 +36,8 @@ public class DrawingCanvas extends JPanel implements Runnable{
 
 		setSize(size);
 		setVisible(true);
-		
-		gravity = 0.9f;
-		character = new MainCharacter(50, 500, 4.0f, 0.0f);
+
+        character = new MainCharacter(50, 500, 0f, 0.0f);
 
         inputHandler = new InputHandler(this, character);
 
@@ -80,7 +80,8 @@ public class DrawingCanvas extends JPanel implements Runnable{
 				delta--;
 			}
 			render();
-			frames++;
+            repaint();
+            frames++;
 			if (System.currentTimeMillis() - timer > 1000) { // reset every second
 				timer += 1000;
 				//System.out.println(updates + "Ticks, Fps" + frames);
@@ -90,8 +91,14 @@ public class DrawingCanvas extends JPanel implements Runnable{
 			cycleTime = synchroFramerate(cycleTime);
 		}
 	}
-	
-	public long synchroFramerate(Long cycleTime) {
+
+    /**
+     * Ensure that the game loop runs at good fps by sleeping if game loop was finished to quickly
+     *
+     * @param cycleTime
+     * @return
+     */
+    public long synchroFramerate(Long cycleTime) {
 		cycleTime = cycleTime + 10; // add the number of millisecond necessary to complete a loop iteration
 		long difference = cycleTime - System.currentTimeMillis();
 		try {
@@ -108,41 +115,66 @@ public class DrawingCanvas extends JPanel implements Runnable{
 	public void tick() {
 
         Command command = inputHandler.handleInput();
-        if (command != null) command.execute(character);
+
+        if (command != null) {
+            //System.out.println("Commande : " +command);
+            command.execute(character);
+        }
         character.update(gravity);
     }
 	
 	/**
 	 * renders the world
 	 */
-	public void render(){
-		repaint();
-	}
-	
-	protected void paintComponent(Graphics g){
-		
-		super.paintComponent(g);
-		Graphics2D graphic2D = (Graphics2D) g;
+	public void render() {
 
-		/*
-		 * Game Rendering
-		 */
+        if (bufferImage == null) {
+            bufferImage = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
+        }
+
+        Graphics2D g2D = (Graphics2D) bufferImage.getGraphics();
+
+        // Set background
+        g2D.setColor(Color.WHITE);
+        g2D.fillRect(0, 0, this.getWidth(), this.getHeight());
+
         // Flip the image vertically
-
-
-        switch (character.getMovement()){
-            case MOVINGRIGHT: ((Graphics2D) g).drawImage(run1, null, character.getX(), character.getY());
+        switch (character.getMovement()) {
+            case MOVINGRIGHT:
+                g2D.drawImage(run1, null, character.getX(), character.getY());
                 break;
-            case MOVINGLEFT: ((Graphics2D) g).drawImage(flipImage(run1), null, character.getX(), character.getY());
+            case MOVINGLEFT:
+                g2D.drawImage(flipImage(run1), null, character.getX(), character.getY());
                 break;
-            case JUMPING: ((Graphics2D) g).drawImage(jump1, null, character.getX(), character.getY());
+            case JUMPING:
+                g2D.drawImage(jump1, null, character.getX(), character.getY());
                 break;
-            case IDLE: ((Graphics2D) g).drawImage(idle, null, character.getX(), character.getY());
+            case JUMPINGRIGHT:
+                g2D.drawImage(jump1, null, character.getX(), character.getY());
+                break;
+            case JUMPINGLEFT:
+                g2D.drawImage(flipImage(jump1), null, character.getX(), character.getY());
+                break;
+            case IDLE:
+                g2D.drawImage(idle, null, character.getX(), character.getY());
                 break;
         }
 
+        g2D.dispose();
+    }
 
-		graphic2D.dispose();
+    protected void paintComponent(Graphics g) {
+
+        super.paintComponent(g);
+        Graphics2D g2D = (Graphics2D) g;
+
+		/*
+         * Game Painting
+		 */
+
+        g2D.drawImage(bufferImage, null, 0, 0);
+
+        g2D.dispose();
 	}
 	
 	/**
@@ -165,9 +197,14 @@ public class DrawingCanvas extends JPanel implements Runnable{
 		} catch (InterruptedException e) {
 			
 			e.printStackTrace();
-		}
-	}
+        }
+    }
 
+    /**
+     * Flip image
+     * @param original image to flip
+     * @return Flipped image
+     */
     public BufferedImage flipImage(BufferedImage original){
 
         AffineTransform tx = AffineTransform.getScaleInstance(-1, 1);

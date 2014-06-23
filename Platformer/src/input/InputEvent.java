@@ -7,7 +7,14 @@ import java.util.EventObject;
  */
 public class InputEvent extends EventObject {
 
-    public InputEvent(Object source) {
+    private boolean keyPressed;
+
+    public InputEvent(Object source, boolean keyPressed) {
         super(source);
+        this.keyPressed = keyPressed;
+    }
+
+    public boolean isKeyPressed() {
+        return keyPressed;
     }
 }

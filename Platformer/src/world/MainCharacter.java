@@ -1,61 +1,60 @@
 package world;
 
-public class MainCharacter {
-	
-	private int x, y;
-	private float velocityX, velocityY;
-	private boolean onGround;
-	private Movement movement;
-	private Movement lastMovement;
-	private int nbKeyPressed;
-	
-	public MainCharacter(int x, int y, float velocityX, float velocityY){
-		this.x = x;
-		this.y = y;
-		this.velocityX = velocityX;
-		this.velocityY = velocityY;
-		this.movement = Movement.IDLE;
-		this.lastMovement = Movement.IDLE;
-		this.nbKeyPressed = 0;
-	}
-	
-	public void startMoving(Movement movement){
-        this.movement = movement;
+public class MainCharacter extends GameActor {
 
-	}
-	
-	public void stopMoving(Movement movement){
+    private boolean onGround;
+    private Movement movement;
+    private Movement lastMovement;
+    private int nbKeyPressed;
 
+    public MainCharacter(int x, int y, float velocityX, float velocityY) {
+        this.x = x;
+        this.y = y;
+        this.velocityX = velocityX;
+        this.velocityY = velocityY;
         this.movement = Movement.IDLE;
-	}
-	
-	public void jump(float velocityY){
-		if(onGround){
-			this.velocityY = velocityY;
-			onGround = false;
-            movement = Movement.JUMPING;
-		}			
-	}
+        this.lastMovement = Movement.IDLE;
+        this.nbKeyPressed = 0;
+    }
 
-	/*
-    public void stopJump(){
-		if(velocityY < -6.0f)velocityY = -6.0f;
-		System.out.println("Stop jump !");
-	}*/
+    public void startMoving(Movement movement) {
 
-    public void update(float gravity){
+        // Check if moving while jumping
+        if (onGround) this.movement = movement;
+        velocityX = movement.getVelocityX();
+    }
+
+    public void stopMoving(Movement movement) {
+        velocityX = 0;
+        if (onGround) this.movement = movement;
+        else this.movement = Movement.JUMPING;
+    }
+
+    public void jump(Movement jump) {
+
+        movement = jump;
+        this.velocityX = jump.getVelocityX();
+        if (onGround) {
+
+            this.velocityY = jump.getVelocityY();
+            onGround = false;
+        }
+    }
+
+    public void update(float gravity) {
 
         velocityY += gravity;
         y += velocityY;
-        x += movement.getVelocityX();
+        x += velocityX;
 
-        if(y > 500){
+        if (y > 500) {
             y = 500;
             onGround = true;
             velocityY = 0;
         }
-
-        if(onGround && movement == Movement.JUMPING) movement = Movement.IDLE;
+        //System.out.println(movement);
+        if (onGround && (movement == Movement.JUMPING || movement == Movement.JUMPINGRIGHT || movement == Movement.JUMPINGLEFT))
+            movement = Movement.IDLE;
     }
 
     public int getX() {
@@ -74,12 +73,12 @@ public class MainCharacter {
         this.y = y;
     }
 
-	public Movement getMovement() {
-		return movement;
-	}
+    public Movement getMovement() {
+        return movement;
+    }
 
-	public void setMovement(Movement movement) {
-		this.movement = movement;
-	}
-	
+    public void setMovement(Movement movement) {
+        this.movement = movement;
+    }
+
 }

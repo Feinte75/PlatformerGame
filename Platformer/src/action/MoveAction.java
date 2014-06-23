@@ -2,16 +2,13 @@ package action;
 
 import input.Input;
 import input.InputEvent;
-import input.KeyboardManager;
 import listeners.InputListener;
-import world.MainCharacter;
+import world.GameActor;
 import world.Movement;
 
 import java.awt.event.ActionEvent;
 
 public class MoveAction extends KeyboardManager implements Command {
-
-    private Movement movement;
 
     public MoveAction(Movement movement, boolean keyPressed) {
         super(keyPressed);
@@ -26,20 +23,24 @@ public class MoveAction extends KeyboardManager implements Command {
     @Override
     protected void fireChangeEvent() {
 
-        InputEvent evt;
-        if (movement == Movement.MOVINGRIGHT) evt = new InputEvent(Input.MOVERIGHT);
-        else if (movement == Movement.MOVINGLEFT) evt = new InputEvent(Input.MOVELEFT);
-        else evt = new InputEvent(Input.IDLE);
+        InputEvent evt = null;
+        if (keyPressed) {
+            if (movement == Movement.MOVINGRIGHT) evt = new InputEvent(Input.MOVERIGHT, true);
+            else if (movement == Movement.MOVINGLEFT) evt = new InputEvent(Input.MOVELEFT, true);
+        } else {
+            if (movement == Movement.MOVINGRIGHT) evt = new InputEvent(Input.MOVERIGHT, false);
+            else if (movement == Movement.MOVINGLEFT) evt = new InputEvent(Input.MOVELEFT, false);
+        }
 
+        //System.out.println("Event thrown : " + evt.getSource());
         for (InputListener l : listeners) {
             l.inputEvent(evt);
         }
     }
 
     @Override
-    public void execute(MainCharacter character) {
+    public void execute(GameActor character) {
 
-        System.out.println(movement);
         if (keyPressed) {
             character.startMoving(movement);
         } else {

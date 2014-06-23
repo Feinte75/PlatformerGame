@@ -2,20 +2,18 @@ package action;
 
 import input.Input;
 import input.InputEvent;
-import input.KeyboardManager;
 import listeners.InputListener;
-import world.MainCharacter;
+import world.GameActor;
+import world.Movement;
 
 import java.awt.event.ActionEvent;
 
 public class JumpAction extends KeyboardManager implements Command{
 
-	private float velocityY;
-
-    public JumpAction(float velocityY, boolean keyPressed) {
+    public JumpAction(Movement movement, boolean keyPressed) {
         super(keyPressed);
-        this.velocityY = velocityY;
-	}
+        this.movement = movement;
+    }
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -25,26 +23,22 @@ public class JumpAction extends KeyboardManager implements Command{
     @Override
     protected void fireChangeEvent() {
 
-        InputEvent evt;
-        evt = new InputEvent(Input.JUMP);
+        InputEvent evt = null;
+        if (keyPressed) {
+            evt = new InputEvent(Input.JUMP, true);
+        } else {
+            evt = new InputEvent(Input.JUMP, false);
+        }
 
-        //else evt = new InputEvent(Input.JUMPRELEASED);
-
+        //System.out.println("Event thrown : " + evt.getSource());
         for (InputListener l : listeners) {
             l.inputEvent(evt);
         }
     }
 
     @Override
-    public void execute(MainCharacter character) {
+    public void execute(GameActor character) {
 
-        if(keyPressed){
-            System.out.println("Jump");
-            character.jump(velocityY);
-        }
-        /*else{
-            System.out.println("Stop jumping");
-            character.stopJump();
-        }*/
+        character.jump(movement);
     }
 }

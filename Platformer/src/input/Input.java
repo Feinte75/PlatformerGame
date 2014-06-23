@@ -8,6 +8,4 @@ public enum Input {
     MOVERIGHT,
     MOVELEFT,
     JUMP,
-    JUMPRELEASED,
-    IDLE;
 }
