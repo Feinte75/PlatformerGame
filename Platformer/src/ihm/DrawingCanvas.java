@@ -40,18 +40,6 @@ public class DrawingCanvas extends JPanel implements Runnable{
         character = new MainCharacter(50, 500, 0f, 0.0f);
 
         inputHandler = new InputHandler(this, character);
-
-        ss = new SpriteSheet("Platformer/res/spritesheet.png");
-
-        run1 = ss.getRun1();
-        run2 = ss.getRun2();
-        run3 = ss.getRun3();
-        run4 = ss.getRun4();
-        run5 = ss.getRun5();
-        run6 = ss.getRun6();
-
-        jump1 = ss.getJump1();
-        idle = ss.getIdle();
 	}
 	
 	/**
@@ -138,25 +126,26 @@ public class DrawingCanvas extends JPanel implements Runnable{
         g2D.setColor(Color.WHITE);
         g2D.fillRect(0, 0, this.getWidth(), this.getHeight());
 
+
         // Flip the image vertically
         switch (character.getMovement()) {
             case MOVINGRIGHT:
-                g2D.drawImage(run1, null, character.getX(), character.getY());
+                g2D.drawImage(character.getMoveImage(), null, character.getX(), character.getY());
                 break;
             case MOVINGLEFT:
-                g2D.drawImage(flipImage(run1), null, character.getX(), character.getY());
+                g2D.drawImage(flipImage(character.getMoveImage()), null, character.getX(), character.getY());
                 break;
             case JUMPING:
-                g2D.drawImage(jump1, null, character.getX(), character.getY());
+                g2D.drawImage(character.getJumpImage(), null, character.getX(), character.getY());
                 break;
             case JUMPINGRIGHT:
-                g2D.drawImage(jump1, null, character.getX(), character.getY());
+                g2D.drawImage(character.getJumpImage(), null, character.getX(), character.getY());
                 break;
             case JUMPINGLEFT:
-                g2D.drawImage(flipImage(jump1), null, character.getX(), character.getY());
+                g2D.drawImage(flipImage(character.getJumpImage()), null, character.getX(), character.getY());
                 break;
             case IDLE:
-                g2D.drawImage(idle, null, character.getX(), character.getY());
+                g2D.drawImage(character.getIdleImage(), null, character.getX(), character.getY());
                 break;
         }
 

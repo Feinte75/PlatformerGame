@@ -1,5 +1,8 @@
 package world;
 
+import graphic.SpriteAnimation;
+import graphic.SpriteSheet;
+
 public class MainCharacter extends GameActor {
 
     private boolean onGround;
@@ -15,6 +18,10 @@ public class MainCharacter extends GameActor {
         this.movement = Movement.IDLE;
         this.lastMovement = Movement.IDLE;
         this.nbKeyPressed = 0;
+        ss = new SpriteSheet("Platformer/res/spritesheet.png");
+        move = new SpriteAnimation(ss, "move");
+        jump = new SpriteAnimation(ss, "jump");
+        idle = new SpriteAnimation(ss, "idle");
     }
 
     public void startMoving(Movement movement) {

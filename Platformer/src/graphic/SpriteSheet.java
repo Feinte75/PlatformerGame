@@ -4,6 +4,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.LinkedList;
 
 /**
  * Created by feinte on 31/05/2014.
@@ -41,6 +42,28 @@ public class SpriteSheet {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public LinkedList<BufferedImage> getAnimation(String identifier) {
+
+        LinkedList<BufferedImage> animation = new LinkedList<BufferedImage>();
+
+        if (identifier.equals("move")) {
+            animation.add(run1);
+            animation.add(run2);
+            animation.add(run3);
+            animation.add(run4);
+            animation.add(run5);
+            animation.add(run6);
+        }
+        if (identifier.equals("jump")) {
+            animation.add(jump1);
+        }
+        if (identifier.equals("idle")) {
+            animation.add(idle);
+        }
+
+        return animation;
     }
 
     public BufferedImage getRun1() {
