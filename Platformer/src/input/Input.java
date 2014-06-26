@@ -7,5 +7,6 @@ public enum Input {
 
     MOVERIGHT,
     MOVELEFT,
-    JUMP;
+    JUMP,
+    TELEPORT;
 }

@@ -4,6 +4,8 @@ import world.GameActor;
 
 /**
  * Created by Glenn on 15/06/2014.
+ * Command interface
+ * Used to implement actions
  */
 public interface Command {
 

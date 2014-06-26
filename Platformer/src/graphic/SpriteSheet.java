@@ -20,6 +20,10 @@ public class SpriteSheet {
     private BufferedImage run6;
     private BufferedImage jump1;
     private BufferedImage idle;
+    private BufferedImage teleport1;
+    private BufferedImage teleport2;
+    private BufferedImage teleport3;
+    private BufferedImage teleport4;
 
     public SpriteSheet(String path) {
 
@@ -32,6 +36,10 @@ public class SpriteSheet {
         run5 = spriteSheet.getSubimage(163, 49, 35, 34);
         run6 = spriteSheet.getSubimage(201, 49, 35, 34);
         idle = spriteSheet.getSubimage(1, 86, 16, 44);
+        teleport1 = spriteSheet.getSubimage(1, 133, 26, 37);
+        teleport2 = spriteSheet.getSubimage(30, 133, 25, 37);
+        teleport3 = spriteSheet.getSubimage(58, 129, 24, 41);
+        teleport4 = spriteSheet.getSubimage(86, 122, 26, 48);
     }
 
     public void loadImage(String path) {
@@ -62,39 +70,13 @@ public class SpriteSheet {
         if (identifier.equals("idle")) {
             animation.add(idle);
         }
+        if (identifier.equals("teleport")) {
+            animation.add(teleport1);
+            animation.add(teleport2);
+            animation.add(teleport3);
+            animation.add(teleport4);
+        }
 
         return animation;
-    }
-
-    public BufferedImage getRun1() {
-        return run1;
-    }
-
-    public BufferedImage getRun2() {
-        return run2;
-    }
-
-    public BufferedImage getRun3() {
-        return run3;
-    }
-
-    public BufferedImage getRun4() {
-        return run4;
-    }
-
-    public BufferedImage getRun5() {
-        return run5;
-    }
-
-    public BufferedImage getRun6() {
-        return run6;
-    }
-
-    public BufferedImage getJump1() {
-        return jump1;
-    }
-
-    public BufferedImage getIdle() {
-        return idle;
     }
 }

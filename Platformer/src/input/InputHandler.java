@@ -3,13 +3,14 @@ package input;
 import action.Command;
 import action.JumpAction;
 import action.MoveAction;
+import action.TeleportAction;
 import listeners.InputListener;
 import world.MainCharacter;
 import world.Movement;
 
 import javax.swing.*;
-import java.awt.event.KeyEvent;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Glenn on 15/06/2014.
@@ -26,6 +27,8 @@ public class InputHandler implements InputListener {
     private JumpAction jumpReleased;
     private JumpAction jumpRight;
     private JumpAction jumpLeft;
+    private TeleportAction teleport;
+    private TeleportAction teleportReleased;
 
     private HashMap<Input, State> inputMap;
 
@@ -48,22 +51,29 @@ public class InputHandler implements InputListener {
         jumpRight = new JumpAction(Movement.JUMPINGRIGHT, true);
         jumpLeft = new JumpAction(Movement.JUMPINGLEFT, true);
 
+        teleport = new TeleportAction(true);
+        teleportReleased = new TeleportAction(false);
 
         // Key bindings
-        canvas.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0), "moveLeft");
+        canvas.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("pressed LEFT"), "moveLeft");
         canvas.getActionMap().put("moveLeft", moveLeft);
-        canvas.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0, true), "moveLeftReleased");
+        canvas.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("released LEFT"), "moveLeftReleased");
         canvas.getActionMap().put("moveLeftReleased", stopMovingLeft);
 
-        canvas.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0), "moveRight");
+        canvas.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("pressed RIGHT"), "moveRight");
         canvas.getActionMap().put("moveRight", moveRight);
-        canvas.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0, true), "moveRightReleased");
+        canvas.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("released RIGHT"), "moveRightReleased");
         canvas.getActionMap().put("moveRightReleased", stopMovingRight);
 
-        canvas.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0), "jump");
+        canvas.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("pressed UP"), "jump");
         canvas.getActionMap().put("jump", jump);
-        canvas.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0, true), "jumpReleased");
+        canvas.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("released UP"), "jumpReleased");
         canvas.getActionMap().put("jumpReleased", jumpReleased);
+
+        canvas.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("pressed A"), "teleport");
+        canvas.getActionMap().put("teleport", teleport);
+        canvas.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("released A"), "teleportReleased");
+        canvas.getActionMap().put("teleportReleased", teleportReleased);
 
         // Subscribe the input handler to every actions
         moveLeft.addInputListener(this);
@@ -72,23 +82,35 @@ public class InputHandler implements InputListener {
         stopMovingRight.addInputListener(this);
         jump.addInputListener(this);
         jumpReleased.addInputListener(this);
+        teleport.addInputListener(this);
+        teleportReleased.addInputListener(this);
 
     }
 
     /**
      * Update the inputMap with the new input state
+     * When the event come from a pressed key, check if it is the first time
+     * If it is -> update the inputMap to KEYPRESSEDONCE
+     * If not -> update to KEYPRESSED
      *
-     * @param input InputEvent
+     * @param input InputEvent The event source
      */
     @Override
     public void inputEvent(InputEvent input) {
 
         Input source = (Input) input.getSource();
 
-        if (!input.isKeyPressed()) inputMap.put(source, State.KEYRELEASED);
-        else {
-            if (inputMap.get(input) == State.KEYRELEASED) inputMap.put(source, State.KEYPRESSEDONCE);
+        if (input.isKeyPressed()) {
+            if (inputMap.get(source) == State.KEYRELEASED) inputMap.put(source, State.KEYPRESSEDONCE);
             else inputMap.put(source, State.KEYPRESSED);
+        } else {
+            //if (inputMap.get(source) == State.KEYPRESSED) inputMap.put(source, State.KEYJUSTRELEASED);
+            //else
+            inputMap.put(source, State.KEYRELEASED);
+        }
+
+        for (Map.Entry<Input, State> is : inputMap.entrySet()) {
+            System.out.println("Value : " + is.getValue() + " Key : " + is.getKey());
         }
     }
 
@@ -99,10 +121,8 @@ public class InputHandler implements InputListener {
      */
     public Command handleInput() {
 
-        /*for(Map.Entry<Input, State> e : inputMap.entrySet()){
-            if(e.getValue() != State.KEYRELEASED)System.out.println("Key : "+e.getKey() + " Value : " +e.getValue());
-        }*/
 
+        if (checkPressedOnce(Input.TELEPORT)) return teleport;
         if (checkPressed(Input.JUMP) && checkPressed(Input.MOVERIGHT) && checkPressed(Input.MOVELEFT)) return jump;
         if (checkPressed(Input.JUMP) && checkPressed(Input.MOVERIGHT)) return jumpRight;
         if (checkPressed(Input.JUMP) && checkPressed(Input.MOVELEFT)) return jumpLeft;
@@ -114,8 +134,18 @@ public class InputHandler implements InputListener {
         return idle;
     }
 
+    /**
+     * Check if the key is pressed
+     *
+     * @param input Key to check
+     * @return True if the key is pressed, false either
+     */
     public boolean checkPressed(Input input) {
         return (inputMap.get(input) == State.KEYPRESSEDONCE || inputMap.get(input) == State.KEYPRESSED);
+    }
+
+    public boolean checkPressedOnce(Input input) {
+        return inputMap.get(input) == State.KEYPRESSEDONCE;
     }
 
     private enum State {
@@ -123,6 +153,8 @@ public class InputHandler implements InputListener {
         KEYPRESSEDONCE,
 
         KEYPRESSED,
+
+        KEYJUSTRELEASED,
 
         KEYRELEASED;
     }

@@ -7,8 +7,6 @@ import world.MainCharacter;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 
 public class DrawingCanvas extends JPanel implements Runnable{
@@ -126,28 +124,7 @@ public class DrawingCanvas extends JPanel implements Runnable{
         g2D.setColor(Color.WHITE);
         g2D.fillRect(0, 0, this.getWidth(), this.getHeight());
 
-
-        // Flip the image vertically
-        switch (character.getMovement()) {
-            case MOVINGRIGHT:
-                g2D.drawImage(character.getMoveImage(), null, character.getX(), character.getY());
-                break;
-            case MOVINGLEFT:
-                g2D.drawImage(flipImage(character.getMoveImage()), null, character.getX(), character.getY());
-                break;
-            case JUMPING:
-                g2D.drawImage(character.getJumpImage(), null, character.getX(), character.getY());
-                break;
-            case JUMPINGRIGHT:
-                g2D.drawImage(character.getJumpImage(), null, character.getX(), character.getY());
-                break;
-            case JUMPINGLEFT:
-                g2D.drawImage(flipImage(character.getJumpImage()), null, character.getX(), character.getY());
-                break;
-            case IDLE:
-                g2D.drawImage(character.getIdleImage(), null, character.getX(), character.getY());
-                break;
-        }
+        g2D.drawImage(character.render(), null, character.getX(), character.getY());
 
         g2D.dispose();
     }
@@ -187,21 +164,6 @@ public class DrawingCanvas extends JPanel implements Runnable{
 			
 			e.printStackTrace();
         }
-    }
-
-    /**
-     * Flip image
-     * @param original image to flip
-     * @return Flipped image
-     */
-    public BufferedImage flipImage(BufferedImage original){
-
-        AffineTransform tx = AffineTransform.getScaleInstance(-1, 1);
-        tx.translate(-original.getWidth(),0);
-        AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
-        original = op.filter(original, null);
-
-        return original;
     }
 
 	public void setPlaying(boolean b) {

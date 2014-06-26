@@ -13,10 +13,10 @@ public class MoveAction extends KeyboardManager implements Command {
     public MoveAction(Movement movement, boolean keyPressed) {
         super(keyPressed);
         this.movement = movement;
-	}
-	
-	@Override
-	public void actionPerformed(ActionEvent e) {
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
         fireChangeEvent();
     }
 
@@ -32,7 +32,6 @@ public class MoveAction extends KeyboardManager implements Command {
             else if (movement == Movement.MOVINGLEFT) evt = new InputEvent(Input.MOVELEFT, false);
         }
 
-        //System.out.println("Event thrown : " + evt.getSource());
         for (InputListener l : listeners) {
             l.inputEvent(evt);
         }
@@ -44,6 +43,7 @@ public class MoveAction extends KeyboardManager implements Command {
         if (keyPressed) {
             character.startMoving(movement);
         } else {
+
             character.stopMoving(movement);
         }
     }
