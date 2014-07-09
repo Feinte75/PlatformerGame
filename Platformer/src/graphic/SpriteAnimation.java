@@ -10,10 +10,11 @@ import java.util.LinkedList;
  */
 public class SpriteAnimation {
 
-    private LinkedList<BufferedImage> images;
-    private int index = 0;
-    private int counter = 0;
-    private int animationSpeed;
+    protected LinkedList<BufferedImage> images;
+    protected int index = 0;
+    protected int counter = 0;
+    protected int animationSpeed;
+    boolean lock;
 
     public SpriteAnimation(SpriteSheet ss, String identifier, int animationSpeed) {
 
@@ -22,16 +23,19 @@ public class SpriteAnimation {
         this.animationSpeed = animationSpeed;
     }
 
-    public BufferedImage getActiveImage() {
+    public void update() {
 
         counter++;
-
         if (counter % animationSpeed == 0) index++;
+        if (index >= images.size()) index = 0;
+    }
 
-        if (index == images.size()) {
-            index = 0;
-            counter = 0;
-        }
+    public void resetIndex() {
+        index = 0;
+    }
+
+    public BufferedImage getActiveImage() {
         return images.get(index);
     }
+
 }

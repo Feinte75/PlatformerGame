@@ -1,55 +1,83 @@
 package action;
 
-import input.Input;
-import input.InputEvent;
-import listeners.InputListener;
-import world.Action;
+import graphic.SpriteSheet;
+import world.CharacterAction;
 import world.GameActor;
-
-import java.awt.event.ActionEvent;
 
 /**
  * Created by Glenn on 25/06/2014.
  */
-public class TeleportAction extends KeyboardManager implements Command {
+public class TeleportAction extends Command {
 
-    private int counter = 0;
+    public TeleportAction(SpriteSheet ss, String identifier, int animationSpeed) {
 
-    public TeleportAction(boolean keyPressed) {
-        super(keyPressed);
+        super(ss, identifier, animationSpeed);
     }
 
     @Override
-    public void actionPerformed(ActionEvent arg0) {
+    public void stop(GameActor character) {
 
-        System.out.println("Key pressed: " + keyPressed);
-        fireChangeEvent();
-    }
-
-    @Override
-    protected void fireChangeEvent() {
-
-        InputEvent evt = null;
-
-        if (keyPressed) {
-            evt = new InputEvent(Input.TELEPORT, true);
-        } else {
-            evt = new InputEvent(Input.TELEPORT, false);
-        }
-
-        for (InputListener l : listeners) {
-            l.inputEvent(evt);
+        if (stoppable) {
+            spriteAnimation.resetIndex();
+            super.stop(character);
         }
     }
 
     @Override
-    public void execute(GameActor character) {
+    public void update() {
 
-        if (keyPressed) {
-            character.startSpecialAction1(Action.TELEPORT);
-        } else {
-            character.stopSpecialAction1(null);
+        super.update();
+    }
+
+    @Override
+    public void execute(GameActor character, CharacterAction action) {
+
+        if (!running) {
+
+            stoppable = false;
+            running = true;
+            counter = 0;
+            loadTime = 60;
+            character.updateVelocity(0, 0);
         }
+
         counter++;
+
+        System.out.println("Counter : " + counter);
+        if (counter % loadTime == 0) {
+            switch (action) {
+                case MOVELEFT:
+                    character.updatePosition(-160, 0);
+                    flip = true;
+                    break;
+                case MOVERIGHT:
+                    character.updatePosition(160, 0);
+                    break;
+                case JUMPLEFT:
+                    character.updatePosition(-160, -160);
+                    flip = true;
+                    break;
+                case JUMPRIGHT:
+                    character.updatePosition(160, -160);
+                    break;
+                case JUMP:
+                    character.updatePosition(0, -160);
+                    break;
+                default:
+                    break;
+            }
+            running = false;
+            stoppable = true;
+            spriteAnimation.resetIndex();
+            character.setCurrentAction(action);
+        }
+
+
+    }
+
+    @Override
+    public void updateVelocity(int dx, int dy) {
+
+
     }
 }

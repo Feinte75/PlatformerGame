@@ -8,5 +8,8 @@ public enum Input {
     MOVERIGHT,
     MOVELEFT,
     JUMP,
-    TELEPORT;
+    DUCK,
+    SPECIALACTION1,
+    SPECIALACTION2,
+    SPECIALACTION3;
 }

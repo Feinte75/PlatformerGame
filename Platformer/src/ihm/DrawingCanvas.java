@@ -1,8 +1,8 @@
 package ihm;
 
-import action.Command;
 import graphic.SpriteSheet;
 import input.InputHandler;
+import world.CharacterAction;
 import world.MainCharacter;
 
 import javax.swing.*;
@@ -100,13 +100,14 @@ public class DrawingCanvas extends JPanel implements Runnable{
 	 */
 	public void tick() {
 
-        Command command = inputHandler.handleInput();
+        CharacterAction action = inputHandler.handleInput();
 
-        if (command != null) {
-            //System.out.println("Commande : " +command);
-            command.execute(character);
-        }
+
+        //System.out.println("Commande : " +action);
+        character.handleInput(action);
+
         character.update(gravity);
+        character.handleCollision();
     }
 	
 	/**

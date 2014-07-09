@@ -1,50 +1,44 @@
 package action;
 
-import input.Input;
-import input.InputEvent;
-import listeners.InputListener;
+import graphic.SpriteSheet;
+import world.CharacterAction;
 import world.GameActor;
-import world.Movement;
 
-import java.awt.event.ActionEvent;
+public class MoveAction extends Command {
 
-public class MoveAction extends KeyboardManager implements Command {
+    public MoveAction(SpriteSheet ss, String identifier, int animationSpeed) {
 
-    public MoveAction(Movement movement, boolean keyPressed) {
-        super(keyPressed);
-        this.movement = movement;
+        super(ss, identifier, animationSpeed);
+        stoppable = true;
+    }
+
+    public void updateVelocity(int dx, int dy) {
+
+        this.dx = dx;
+        this.dy = dy;
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
-        fireChangeEvent();
+    public void stop(GameActor character) {
+        character.updateVelocity(0, 0);
+        super.stop(character);
     }
 
     @Override
-    protected void fireChangeEvent() {
+    public void execute(GameActor character, CharacterAction action) {
 
-        InputEvent evt = null;
-        if (keyPressed) {
-            if (movement == Movement.MOVINGRIGHT) evt = new InputEvent(Input.MOVERIGHT, true);
-            else if (movement == Movement.MOVINGLEFT) evt = new InputEvent(Input.MOVELEFT, true);
-        } else {
-            if (movement == Movement.MOVINGRIGHT) evt = new InputEvent(Input.MOVERIGHT, false);
-            else if (movement == Movement.MOVINGLEFT) evt = new InputEvent(Input.MOVELEFT, false);
+        switch (action) {
+            case MOVERIGHT:
+                character.updateVelocity(7, 0);
+                flip = false;
+                return;
+            case MOVELEFT:
+                character.updateVelocity(-7, 0);
+                flip = true;
+                return;
         }
 
-        for (InputListener l : listeners) {
-            l.inputEvent(evt);
-        }
+        character.setCurrentAction(action);
     }
 
-    @Override
-    public void execute(GameActor character) {
-
-        if (keyPressed) {
-            character.startMoving(movement);
-        } else {
-
-            character.stopMoving(movement);
-        }
-    }
 }

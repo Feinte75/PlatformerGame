@@ -1,10 +1,11 @@
 package world;
 
-import graphic.SpriteAnimation;
+import action.IdleAction;
+import action.JumpAction;
+import action.MoveAction;
+import action.TeleportAction;
 import graphic.SpriteSheet;
 
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 
 /**
@@ -13,23 +14,22 @@ import java.awt.image.BufferedImage;
  */
 public class MainCharacter extends GameActor {
 
-
     public MainCharacter(int x, int y, float velocityX, float velocityY) {
         this.x = x;
         this.y = y;
         this.velocityX = velocityX;
         this.velocityY = velocityY;
-        this.movement = Movement.IDLE;
 
         ss = new SpriteSheet("Platformer/res/sprite_sheet_kabuto.png");
-        move = new SpriteAnimation(ss, "move", 10);
-        jump = new SpriteAnimation(ss, "jump", 10);
-        idle = new SpriteAnimation(ss, "idle", 10);
+        move = new MoveAction(ss, "move", 10);
+        jump = new JumpAction(ss, "jump", 10);
+        idle = new IdleAction(ss, "idle", 10);
+        specialAction1 = new TeleportAction(ss, "teleport", 16);
+        currentAction = idle;
 
-        actionHandler = new ActionHandler(new SpriteAnimation(ss, "teleport", 60));
     }
 
-    public void startMoving(Movement movement) {
+    /*public void startMoving(Movement movement) {
 
         // Check if moving while jumping
         if (onGround) this.movement = movement;
@@ -56,43 +56,91 @@ public class MainCharacter extends GameActor {
     }
 
     @Override
-    public void startSpecialAction1(Action action) {
+    public void startSpecialAction1(CharacterAction action) {
 
         actionHandler.startAction(action);
     }
 
     @Override
-    public void stopSpecialAction1(Action action) {
+    public void stopSpecialAction1(CharacterAction action) {
 
-    }
+    }*/
 
     public void update(float gravity) {
 
-        if (actionHandler.actionPlaying()) {
+        currentAction.update();
 
-            actionHandler.handleAction(this);
-        } else {
-            velocityY += gravity;
-            y += velocityY;
-            x += velocityX;
+        velocityY += gravity;
 
-            if (y > 500) {
-                y = 500;
-                onGround = true;
-                velocityY = 0;
-            }
-            //System.out.println(movement);
-            if (onGround && (movement == Movement.JUMPING || movement == Movement.JUMPINGRIGHT || movement == Movement.JUMPINGLEFT))
-                movement = Movement.IDLE;
+        y += velocityY;
+        x += velocityX;
+
+        /*if(velocityX > 0) velocityX--;
+        else if(velocityX < 0) velocityX++;*/
+
+        if (y > 500) {
+            y = 500;
+            onGround = true;
+            velocityY = 0;
         }
 
+        //System.out.println(movement);
+        //if (onGround && currentAction == jump)
+        //  currentAction = idle;
+
+
+    }
+
+    @Override
+    public void handleInput(CharacterAction action) {
+
+        //System.out.println(""+currentAction);
+        //System.out.println("VelocityX "+velocityX+"     VelocityY"+velocityY);
+        if (action == null) {
+            currentAction.stop(this);
+            action = CharacterAction.DEFAULT;
+        }
+        currentAction.execute(this, action);
+        /*if(currentAction.isStoppable()){
+
+            switch (action){
+                case MOVERIGHT:
+                    currentAction = move;
+                    move.updateVelocity(10, 0);
+                    break;
+                case MOVELEFT:
+                    currentAction = move;
+                    move.updateVelocity(-10, 0);
+                    break;
+                case JUMP:
+                    currentAction = jump;
+                    jump.updateVelocity(0, -10);
+                    break;
+                case JUMPLEFT:
+                    currentAction = jump;
+                    jump.updateVelocity(-(int)velocityX, -10);
+                    break;
+                case JUMPRIGHT:
+                    currentAction = jump;
+                    jump.updateVelocity((int)velocityX, -10);
+                    break;
+                case SPECIALACTION1:
+            }
+            currentAction.execute(this);
+        }*/
+    }
+
+    public void handleCollision() {
+
+        if (x < 0) x = 0;
+        else if (x > 800) x = 800;
     }
 
     @Override
     public BufferedImage render() {
 
-        //System.out.println("Action : "+action);
-        if (actionHandler.actionPlaying()) {
+        //System.out.println("CharacterAction : "+action);
+        /*if (actionHandler.actionPlaying()) {
 
             switch (movement) {
                 case MOVINGRIGHT:
@@ -119,24 +167,9 @@ public class MainCharacter extends GameActor {
                 return flipImage(getJumpImage());
             case IDLE:
                 return getIdleImage();
-        }
-        return null;
-    }
+        }*/
 
-    /**
-     * Flip image
-     *
-     * @param original image to flip
-     * @return Flipped image
-     */
-    public BufferedImage flipImage(BufferedImage original) {
-
-        AffineTransform tx = AffineTransform.getScaleInstance(-1, 1);
-        tx.translate(-original.getWidth(), 0);
-        AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
-        original = op.filter(original, null);
-
-        return original;
+        return currentAction.getActiveImage();
     }
 
     public int getX() {
@@ -155,12 +188,14 @@ public class MainCharacter extends GameActor {
         this.y = y;
     }
 
-    public Movement getMovement() {
+
+
+    /*public Movement getMovement() {
         return movement;
     }
 
     public void setMovement(Movement movement) {
         this.movement = movement;
-    }
+    }*/
 
 }

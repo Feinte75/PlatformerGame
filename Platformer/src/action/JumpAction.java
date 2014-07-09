@@ -1,44 +1,55 @@
 package action;
 
-import input.Input;
-import input.InputEvent;
-import listeners.InputListener;
+import graphic.SpriteSheet;
+import world.CharacterAction;
 import world.GameActor;
-import world.Movement;
 
-import java.awt.event.ActionEvent;
+public class JumpAction extends Command {
 
-public class JumpAction extends KeyboardManager implements Command{
 
-    public JumpAction(Movement movement, boolean keyPressed) {
-        super(keyPressed);
-        this.movement = movement;
+    public JumpAction(SpriteSheet ss, String identifier, int animationSpeed) {
+
+        super(ss, identifier, animationSpeed);
+        stoppable = true;
     }
-	
-	@Override
-	public void actionPerformed(ActionEvent e) {
-        fireChangeEvent();
+
+    public void updateVelocity(int dx, int dy) {
+
     }
 
     @Override
-    protected void fireChangeEvent() {
+    public void stop(GameActor character) {
 
-        InputEvent evt = null;
-        if (keyPressed) {
-            evt = new InputEvent(Input.JUMP, true);
-        } else {
-            evt = new InputEvent(Input.JUMP, false);
-        }
-
-        //System.out.println("Event thrown : " + evt.getSource());
-        for (InputListener l : listeners) {
-            l.inputEvent(evt);
+        if (character.isOnGround()) {
+            character.updateVelocity(0, 0);
+            super.stop(character);
         }
     }
 
     @Override
-    public void execute(GameActor character) {
+    public void execute(GameActor character, CharacterAction action) {
 
-        character.jump(movement);
+
+        switch (action) {
+            case JUMPRIGHT:
+                if (character.isOnGround()) character.updateVelocity(7, -20);
+                character.setOnGround(false);
+                flip = false;
+                return;
+            case JUMPLEFT:
+                if (character.isOnGround()) character.updateVelocity(-7, -20);
+                character.setOnGround(false);
+                flip = true;
+                return;
+            case JUMP:
+                if (character.isOnGround()) character.updateVelocity(0, -20);
+                character.setOnGround(false);
+                return;
+        }
+
+        if (character.isOnGround()) character.setCurrentAction(action);
+
+
     }
+
 }
