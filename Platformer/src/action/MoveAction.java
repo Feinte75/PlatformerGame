@@ -27,14 +27,14 @@ public class MoveAction extends Command {
     @Override
     public void execute(GameActor character, CharacterAction action) {
 
+        classicFlipping(action);
+
         switch (action) {
             case MOVERIGHT:
                 character.updateVelocity(7, 0);
-                flip = false;
                 return;
             case MOVELEFT:
                 character.updateVelocity(-7, 0);
-                flip = true;
                 return;
         }
 

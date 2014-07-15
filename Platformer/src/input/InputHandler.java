@@ -8,6 +8,7 @@ import java.util.HashMap;
 
 /**
  * Created by Glenn on 15/06/2014.
+ * Handle input and key bindings with actions
  */
 public class InputHandler {
 
@@ -44,29 +45,29 @@ public class InputHandler {
         specialAction3Pressed = new KeyboardInput(true, this);
         specialAction3Released = new KeyboardInput(false, this);
 
-        setBindings(canvas, "A", "specialAction1");
-        setBindings(canvas, "Z", "specialAction2");
-        setBindings(canvas, "E", "specialAction3");
+        setBindings(canvas, "A", "specialAction1", specialAction1Pressed, specialAction1Released);
+        setBindings(canvas, "Z", "specialAction2", specialAction2Pressed, specialAction2Released);
+        setBindings(canvas, "E", "specialAction3", specialAction3Pressed, specialAction3Released);
 
         moveRightPressed = new KeyboardInput(true, this);
         moveRightReleased = new KeyboardInput(false, this);
 
-        setBindings(canvas, "RIGHT", "moveRight");
+        setBindings(canvas, "RIGHT", "moveRight", moveRightPressed, moveRightReleased);
 
         moveLeftPressed = new KeyboardInput(true, this);
         moveLeftReleased = new KeyboardInput(false, this);
 
-        setBindings(canvas, "LEFT", "moveLeft");
+        setBindings(canvas, "LEFT", "moveLeft", moveLeftPressed, moveLeftReleased);
 
         jumpPressed = new KeyboardInput(true, this);
         jumpReleased = new KeyboardInput(false, this);
 
-        setBindings(canvas, "UP", "jump");
+        setBindings(canvas, "UP", "jump", jumpPressed, jumpReleased);
 
         duckPressed = new KeyboardInput(true, this);
         duckReleased = new KeyboardInput(false, this);
 
-        setBindings(canvas, "DOWN", "duck");
+        setBindings(canvas, "DOWN", "duck", duckPressed, duckReleased);
 
         inputMap.put(Input.MOVELEFT, State.KEYRELEASED);
         inputMap.put(Input.MOVERIGHT, State.KEYRELEASED);
@@ -78,44 +79,12 @@ public class InputHandler {
 
     }
 
-    public void setBindings(JPanel canvas, String keyName, String actionName) {
+    public void setBindings(JPanel canvas, String keyName, String actionName, KeyboardInput actionPressed, KeyboardInput actionReleased) {
 
-        if (actionName.equals("specialAction1")) {
-            canvas.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("pressed " + keyName), actionName + "Pressed");
-            canvas.getActionMap().put(actionName + "Pressed", specialAction1Pressed);
-            canvas.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("released " + keyName), actionName + "Released");
-            canvas.getActionMap().put(actionName + "Released", specialAction1Released);
-        } else if (actionName.equals("specialAction2")) {
-            canvas.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("pressed " + keyName), actionName + "Pressed");
-            canvas.getActionMap().put(actionName + "Pressed", specialAction2Pressed);
-            canvas.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("released " + keyName), actionName + "Released");
-            canvas.getActionMap().put(actionName + "Released", specialAction2Released);
-        } else if (actionName.equals("specialAction3")) {
-            canvas.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("pressed " + keyName), actionName + "Pressed");
-            canvas.getActionMap().put(actionName + "Pressed", specialAction3Pressed);
-            canvas.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("released " + keyName), actionName + "Released");
-            canvas.getActionMap().put(actionName + "Released", specialAction3Released);
-        } else if (actionName.equals("moveRight")) {
-            canvas.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("pressed " + keyName), actionName + "Pressed");
-            canvas.getActionMap().put(actionName + "Pressed", moveRightPressed);
-            canvas.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("released " + keyName), actionName + "Released");
-            canvas.getActionMap().put(actionName + "Released", moveRightReleased);
-        } else if (actionName.equals("moveLeft")) {
-            canvas.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("pressed " + keyName), actionName + "Pressed");
-            canvas.getActionMap().put(actionName + "Pressed", moveLeftPressed);
-            canvas.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("released " + keyName), actionName + "Released");
-            canvas.getActionMap().put(actionName + "Released", moveLeftReleased);
-        } else if (actionName.equals("jump")) {
-            canvas.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("pressed " + keyName), actionName + "Pressed");
-            canvas.getActionMap().put(actionName + "Pressed", jumpPressed);
-            canvas.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("released " + keyName), actionName + "Released");
-            canvas.getActionMap().put(actionName + "Released", jumpReleased);
-        } else if (actionName.equals("duck")) {
-            canvas.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("pressed " + keyName), actionName + "Pressed");
-            canvas.getActionMap().put(actionName + "Pressed", duckPressed);
-            canvas.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("released " + keyName), actionName + "Released");
-            canvas.getActionMap().put(actionName + "Released", duckReleased);
-        }
+        canvas.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("pressed " + keyName), actionName + "Pressed");
+        canvas.getActionMap().put(actionName + "Pressed", actionPressed);
+        canvas.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("released " + keyName), actionName + "Released");
+        canvas.getActionMap().put(actionName + "Released", actionReleased);
     }
 
     /**

@@ -16,9 +16,9 @@ import java.awt.image.BufferedImage;
  */
 public abstract class Command {
 
+    protected static boolean flip = false;
     protected SpriteAnimation spriteAnimation;
     protected int dx = 0, dy = 0;
-    protected boolean flip = false;
     protected boolean stoppable = true;
     protected boolean running = false;
     protected int counter = 0;
@@ -49,6 +49,36 @@ public abstract class Command {
 
     public boolean isStoppable() {
         return stoppable;
+    }
+
+    /**
+     * Update flip variable according to the action param
+     * @param action
+     */
+    public void classicFlipping(CharacterAction action) {
+
+        switch (action) {
+            case DEFAULT:
+                break;
+            case IDLE:
+                break;
+            case ATTACK:
+                break;
+            case MOVELEFT:
+                flip = true;
+                break;
+            case JUMPLEFT:
+                flip = true;
+                break;
+            case JUMPRIGHT:
+                flip = false;
+                break;
+            case MOVERIGHT:
+                flip = false;
+                break;
+            case JUMP:
+                break;
+        }
     }
 
     /**

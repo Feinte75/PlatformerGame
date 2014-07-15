@@ -29,17 +29,16 @@ public class JumpAction extends Command {
     @Override
     public void execute(GameActor character, CharacterAction action) {
 
+        classicFlipping(action);
 
         switch (action) {
             case JUMPRIGHT:
                 if (character.isOnGround()) character.updateVelocity(7, -20);
                 character.setOnGround(false);
-                flip = false;
                 return;
             case JUMPLEFT:
                 if (character.isOnGround()) character.updateVelocity(-7, -20);
                 character.setOnGround(false);
-                flip = true;
                 return;
             case JUMP:
                 if (character.isOnGround()) character.updateVelocity(0, -20);

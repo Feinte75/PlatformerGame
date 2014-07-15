@@ -6,6 +6,7 @@ import world.GameActor;
 
 /**
  * Created by Glenn on 09/07/2014.
+ *
  */
 public class IdleAction extends Command {
 
@@ -15,6 +16,8 @@ public class IdleAction extends Command {
 
     @Override
     public void execute(GameActor character, CharacterAction action) {
+
+        classicFlipping(action);
 
         character.updateVelocity(0, 0);
         character.setCurrentAction(action);

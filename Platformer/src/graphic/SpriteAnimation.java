@@ -1,5 +1,6 @@
 package graphic;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.LinkedList;
 
@@ -11,6 +12,7 @@ import java.util.LinkedList;
 public class SpriteAnimation {
 
     protected LinkedList<BufferedImage> images;
+    protected LinkedList<Rectangle> boundingBoxes;
     protected int index = 0;
     protected int counter = 0;
     protected int animationSpeed;
