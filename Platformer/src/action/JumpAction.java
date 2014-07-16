@@ -1,15 +1,14 @@
 package action;
 
-import graphic.SpriteSheet;
 import world.CharacterAction;
 import world.GameActor;
 
 public class JumpAction extends Command {
 
 
-    public JumpAction(SpriteSheet ss, String identifier, int animationSpeed) {
+    public JumpAction(String name, String identifier, int animationSpeed) {
 
-        super(ss, identifier, animationSpeed);
+        super(name, identifier, animationSpeed);
         stoppable = true;
     }
 
@@ -29,7 +28,7 @@ public class JumpAction extends Command {
     @Override
     public void execute(GameActor character, CharacterAction action) {
 
-        classicFlipping(action);
+        defaultFlipping(action);
 
         switch (action) {
             case JUMPRIGHT:

@@ -1,7 +1,6 @@
 package action;
 
 import graphic.SpriteAnimation;
-import graphic.SpriteSheet;
 import world.CharacterAction;
 import world.GameActor;
 
@@ -22,11 +21,11 @@ public abstract class Command {
     protected boolean stoppable = true;
     protected boolean running = false;
     protected int counter = 0;
-    protected int loadTime;
+    protected int loadTime = 0;
 
-    public Command(SpriteSheet ss, String identifier, int animationSpeed) {
+    public Command(String name, String identifier, int animationSpeed) {
 
-        spriteAnimation = new SpriteAnimation(ss, identifier, animationSpeed);
+        spriteAnimation = new SpriteAnimation(name, identifier, animationSpeed);
     }
 
     // MainCharacter can change to a more global type like "GameActor"
@@ -55,7 +54,7 @@ public abstract class Command {
      * Update flip variable according to the action param
      * @param action
      */
-    public void classicFlipping(CharacterAction action) {
+    public void defaultFlipping(CharacterAction action) {
 
         switch (action) {
             case DEFAULT:

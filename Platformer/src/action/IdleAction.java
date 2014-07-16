@@ -1,6 +1,5 @@
 package action;
 
-import graphic.SpriteSheet;
 import world.CharacterAction;
 import world.GameActor;
 
@@ -10,14 +9,14 @@ import world.GameActor;
  */
 public class IdleAction extends Command {
 
-    public IdleAction(SpriteSheet ss, String identifier, int animationSpeed) {
-        super(ss, identifier, animationSpeed);
+    public IdleAction(String name, String identifier, int animationSpeed) {
+        super(name, identifier, animationSpeed);
     }
 
     @Override
     public void execute(GameActor character, CharacterAction action) {
 
-        classicFlipping(action);
+        defaultFlipping(action);
 
         character.updateVelocity(0, 0);
         character.setCurrentAction(action);

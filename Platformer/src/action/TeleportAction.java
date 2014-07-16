@@ -1,8 +1,12 @@
 package action;
 
-import graphic.SpriteSheet;
+import json.JSONObject;
+import json.JSONTokener;
 import world.CharacterAction;
 import world.GameActor;
+
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 
 /**
  * Created by Glenn on 25/06/2014.
@@ -10,9 +14,23 @@ import world.GameActor;
  */
 public class TeleportAction extends Command {
 
-    public TeleportAction(SpriteSheet ss, String identifier, int animationSpeed) {
+    public TeleportAction(String name, String identifier, int animationSpeed) {
 
-        super(ss, identifier, animationSpeed);
+        super(name, identifier, animationSpeed);
+
+        FileReader fileReader = null;
+
+        try {
+            fileReader = new FileReader("Platformer/conf/actions/TeleportAction.json");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        JSONObject jsonObject = new JSONObject(new JSONTokener(fileReader));
+        loadTime = jsonObject.getInt("loadingtime");
+
+        dx = jsonObject.getJSONObject("positionupdate").getInt("dx");
+        dy = jsonObject.getJSONObject("positionupdate").getInt("dy");
     }
 
     @Override
@@ -38,35 +56,34 @@ public class TeleportAction extends Command {
             stoppable = false;
             running = true;
             counter = 0;
-            loadTime = 60;
             character.updateVelocity(0, 0);
         }
 
         counter++;
 
-        classicFlipping(action);
+        defaultFlipping(action);
 
         System.out.println("Counter : " + counter);
         if (counter % loadTime == 0) {
             switch (action) {
                 case MOVELEFT:
-                    character.updatePosition(-160, 0);
+                    character.updatePosition(-dx, 0);
                     break;
                 case MOVERIGHT:
-                    character.updatePosition(160, 0);
+                    character.updatePosition(dx, 0);
                     break;
                 case JUMPLEFT:
-                    character.updatePosition(-160, -160);
+                    character.updatePosition(-dx, -dy);
                     character.updateVelocity(-7, -10);
                     character.setOnGround(false);
                     break;
                 case JUMPRIGHT:
-                    character.updatePosition(160, -160);
+                    character.updatePosition(dx, -dy);
                     character.updateVelocity(7, -10);
                     character.setOnGround(false);
                     break;
                 case JUMP:
-                    character.updatePosition(0, -160);
+                    character.updatePosition(0, -dy);
                     character.updateVelocity(0, -10);
                     character.setOnGround(false);
                     break;

@@ -1,14 +1,13 @@
 package action;
 
-import graphic.SpriteSheet;
 import world.CharacterAction;
 import world.GameActor;
 
 public class MoveAction extends Command {
 
-    public MoveAction(SpriteSheet ss, String identifier, int animationSpeed) {
+    public MoveAction(String name, String identifier, int animationSpeed) {
 
-        super(ss, identifier, animationSpeed);
+        super(name, identifier, animationSpeed);
         stoppable = true;
     }
 
@@ -27,7 +26,7 @@ public class MoveAction extends Command {
     @Override
     public void execute(GameActor character, CharacterAction action) {
 
-        classicFlipping(action);
+        defaultFlipping(action);
 
         switch (action) {
             case MOVERIGHT:

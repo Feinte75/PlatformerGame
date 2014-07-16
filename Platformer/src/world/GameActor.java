@@ -1,7 +1,6 @@
 package world;
 
 import action.Command;
-import graphic.SpriteSheet;
 
 import java.awt.image.BufferedImage;
 
@@ -17,13 +16,13 @@ public abstract class GameActor {
     protected float velocityX, velocityY;
     protected boolean onGround;
     protected Command currentAction;
-    protected SpriteSheet ss;
     protected Command move;
     protected Command jump;
     protected Command idle;
     protected Command specialAction1;
     protected Command specialAction2;
     protected Command specialAction3;
+    String name;
 
     /*public abstract void jump(Movement movement);
 

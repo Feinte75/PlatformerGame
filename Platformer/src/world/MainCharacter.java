@@ -4,7 +4,6 @@ import action.IdleAction;
 import action.JumpAction;
 import action.MoveAction;
 import action.TeleportAction;
-import graphic.SpriteSheet;
 
 import java.awt.image.BufferedImage;
 
@@ -20,11 +19,11 @@ public class MainCharacter extends GameActor {
         this.velocityX = velocityX;
         this.velocityY = velocityY;
 
-        ss = new SpriteSheet("Platformer/res/sprite_sheet_kabuto.png");
-        move = new MoveAction(ss, "move", 10);
-        jump = new JumpAction(ss, "jump", 10);
-        idle = new IdleAction(ss, "idle", 10);
-        specialAction1 = new TeleportAction(ss, "teleport", 16);
+        name = "kabuto";
+        move = new MoveAction(name, "move", 10);
+        jump = new JumpAction(name, "jump", 10);
+        idle = new IdleAction(name, "idle", 10);
+        specialAction1 = new TeleportAction(name, "specialaction1", 16);
         currentAction = idle;
 
     }
