@@ -10,13 +10,12 @@ import java.io.FileReader;
 
 /**
  * Created by Glenn on 25/06/2014.
- *
  */
 public class TeleportAction extends Command {
 
-    public TeleportAction(String name, String identifier, int animationSpeed) {
+    public TeleportAction(String name, String identifier) {
 
-        super(name, identifier, animationSpeed);
+        super(name, identifier);
 
         FileReader fileReader = null;
 

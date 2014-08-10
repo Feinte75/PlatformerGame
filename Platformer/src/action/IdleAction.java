@@ -5,12 +5,12 @@ import world.GameActor;
 
 /**
  * Created by Glenn on 09/07/2014.
- *
  */
 public class IdleAction extends Command {
 
-    public IdleAction(String name, String identifier, int animationSpeed) {
-        super(name, identifier, animationSpeed);
+    public IdleAction(String name, String identifier) {
+
+        super(name, identifier);
     }
 
     @Override

@@ -31,6 +31,8 @@ public class InputHandler {
     private KeyboardInput jumpReleased = null;
     private KeyboardInput duckPressed = null;
     private KeyboardInput duckReleased = null;
+    private KeyboardInput attackPressed = null;
+    private KeyboardInput attackReleased = null;
 
     public InputHandler(JPanel canvas, MainCharacter character) {
 
@@ -69,10 +71,16 @@ public class InputHandler {
 
         setBindings(canvas, "DOWN", "duck", duckPressed, duckReleased);
 
+        attackPressed = new KeyboardInput(true, this);
+        attackReleased = new KeyboardInput(false, this);
+
+        setBindings(canvas, "Z", "attack", attackPressed, attackReleased);
+
         inputMap.put(Input.MOVELEFT, State.KEYRELEASED);
         inputMap.put(Input.MOVERIGHT, State.KEYRELEASED);
         inputMap.put(Input.JUMP, State.KEYRELEASED);
         inputMap.put(Input.DUCK, State.KEYRELEASED);
+        inputMap.put(Input.ATTACK, State.KEYRELEASED);
         inputMap.put(Input.SPECIALACTION1, State.KEYRELEASED);
         inputMap.put(Input.SPECIALACTION2, State.KEYRELEASED);
         inputMap.put(Input.SPECIALACTION3, State.KEYRELEASED);
@@ -122,6 +130,11 @@ public class InputHandler {
             } else inputMap.put(Input.JUMP, State.KEYPRESSED);
         } else if (keyboardInput == jumpReleased) inputMap.put(Input.JUMP, State.KEYRELEASED);
 
+        else if (keyboardInput == attackPressed) {
+            if (inputMap.get(Input.ATTACK) == State.KEYRELEASED) {
+                inputMap.put(Input.ATTACK, State.KEYPRESSEDONCE);
+            } else inputMap.put(Input.ATTACK, State.KEYPRESSED);
+        } else if (keyboardInput == attackReleased) inputMap.put(Input.ATTACK, State.KEYRELEASED);
 
         /*for(Entry<Input, State> e : inputMap.entrySet()){
             System.out.println(""+e.getKey()+" -> "+e.getValue());
@@ -137,6 +150,7 @@ public class InputHandler {
 
 
         if (checkPressedOnce(Input.SPECIALACTION1)) return CharacterAction.SPECIALACTION1;
+        if (checkPressedOnce(Input.ATTACK)) return CharacterAction.ATTACK;
         if (checkPressed(Input.JUMP) && checkPressed(Input.MOVERIGHT) && checkPressed(Input.MOVELEFT))
             return CharacterAction.JUMP;
         if (checkPressed(Input.JUMP) && checkPressed(Input.MOVERIGHT)) return CharacterAction.JUMPRIGHT;

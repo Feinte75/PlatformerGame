@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.LinkedList;
 
 /**
@@ -22,15 +23,15 @@ import java.util.LinkedList;
 public class SpriteAnimation {
 
     protected LinkedList<BufferedImage> images;
-    protected LinkedList<Rectangle> boundingBoxes;
+    protected HashMap<Integer, LinkedList<Rectangle>> boundingBoxes;
     protected int index = 0;
     protected int counter = 0;
     protected int animationSpeed;
-    boolean lock;
 
-    public SpriteAnimation(String name, String identifier, int animationSpeed) {
+    public SpriteAnimation(String name, String identifier) {
 
         images = new LinkedList<BufferedImage>();
+        boundingBoxes = new HashMap<Integer, LinkedList<Rectangle>>();
         //images = ss.getAnimation(identifier);
         loadImages(name, identifier);
         this.animationSpeed = animationSpeed;
@@ -49,18 +50,24 @@ public class SpriteAnimation {
         JSONObject jsonObject = new JSONObject(new JSONTokener(fileReader));
         BufferedImage spriteSheet = null;
 
+        // Get images sprite sheet
         try {
             spriteSheet = ImageIO.read(new File("Platformer/res/" + jsonObject.getString("spritesheet") + ".png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+        // Extract animation speed
         JSONObject actionLoaded = jsonObject.getJSONObject("animations").getJSONObject(action);
+        animationSpeed = actionLoaded.getInt("animationspeed");
+
         JSONObject loadedImages = actionLoaded.getJSONObject("images");
 
+        // Load each images and its bounding boxes
         int x, y, width, height;
         int i = 1;
         JSONArray imageDelimitors = null;
+        LinkedList<Rectangle> boxes;
         while (true) {
 
             try {
@@ -68,11 +75,15 @@ public class SpriteAnimation {
             } catch (JSONException e) {
                 break;
             }
+            boxes = new LinkedList<Rectangle>();
+            boundingBoxes.put(i - 1, boxes);
             x = imageDelimitors.getInt(0);
             y = imageDelimitors.getInt(1);
             width = imageDelimitors.getInt(2);
             height = imageDelimitors.getInt(3);
 
+            // TODO : add bounding boxes in json files
+            boxes.add(new Rectangle(x, y, width, height));
             images.add(spriteSheet.getSubimage(x, y, width, height));
             i++;
         }
@@ -93,4 +104,7 @@ public class SpriteAnimation {
         return images.get(index);
     }
 
+    public LinkedList<Rectangle> getActiveBoundingBoxes() {
+        return boundingBoxes.get(index);
+    }
 }

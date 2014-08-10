@@ -19,6 +19,7 @@ public abstract class GameActor {
     protected Command move;
     protected Command jump;
     protected Command idle;
+    protected Command attack;
     protected Command specialAction1;
     protected Command specialAction2;
     protected Command specialAction3;
@@ -67,6 +68,9 @@ public abstract class GameActor {
                 break;
             case JUMPRIGHT:
                 currentAction = jump;
+                break;
+            case ATTACK:
+                currentAction = attack;
                 break;
             case SPECIALACTION1:
                 currentAction = specialAction1;

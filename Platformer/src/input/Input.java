@@ -9,6 +9,7 @@ public enum Input {
     MOVELEFT,
     JUMP,
     DUCK,
+    ATTACK,
     SPECIALACTION1,
     SPECIALACTION2,
     SPECIALACTION3;

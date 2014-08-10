@@ -23,9 +23,9 @@ public abstract class Command {
     protected int counter = 0;
     protected int loadTime = 0;
 
-    public Command(String name, String identifier, int animationSpeed) {
+    public Command(String name, String identifier) {
 
-        spriteAnimation = new SpriteAnimation(name, identifier, animationSpeed);
+        spriteAnimation = new SpriteAnimation(name, identifier);
     }
 
     // MainCharacter can change to a more global type like "GameActor"
@@ -38,6 +38,9 @@ public abstract class Command {
 
     public void update() {
         spriteAnimation.update();
+
+        /*LinkedList<Rectangle> test = spriteAnimation.getActiveBoundingBoxes();
+        System.out.println(test.getFirst().toString());*/
     }
 
     public void stop(GameActor character) {

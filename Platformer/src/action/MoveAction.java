@@ -5,9 +5,9 @@ import world.GameActor;
 
 public class MoveAction extends Command {
 
-    public MoveAction(String name, String identifier, int animationSpeed) {
+    public MoveAction(String name, String identifier) {
 
-        super(name, identifier, animationSpeed);
+        super(name, identifier);
         stoppable = true;
     }
 

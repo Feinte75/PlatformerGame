@@ -1,9 +1,6 @@
 package world;
 
-import action.IdleAction;
-import action.JumpAction;
-import action.MoveAction;
-import action.TeleportAction;
+import action.*;
 
 import java.awt.image.BufferedImage;
 
@@ -20,10 +17,11 @@ public class MainCharacter extends GameActor {
         this.velocityY = velocityY;
 
         name = "kabuto";
-        move = new MoveAction(name, "move", 10);
-        jump = new JumpAction(name, "jump", 10);
-        idle = new IdleAction(name, "idle", 10);
-        specialAction1 = new TeleportAction(name, "specialaction1", 16);
+        move = new MoveAction(name, "move");
+        jump = new JumpAction(name, "jump");
+        idle = new IdleAction(name, "idle");
+        attack = new AttackAction(name, "attack");
+        specialAction1 = new TeleportAction(name, "specialaction1");
         currentAction = idle;
 
     }
@@ -132,7 +130,7 @@ public class MainCharacter extends GameActor {
     public void handleCollision() {
 
         if (x < 0) x = 0;
-        else if (x > 800) x = 800;
+        else if (x > 700) x = 700;
     }
 
     @Override
