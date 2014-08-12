@@ -8,9 +8,9 @@ import world.GameActor;
  */
 public class AttackAction extends Command {
 
-    public AttackAction(String entityName, String actionIdentifier, String category) {
+    public AttackAction() {
 
-        super(entityName, actionIdentifier, category);
+        super();
         stoppable = true;
     }
 
@@ -27,14 +27,12 @@ public class AttackAction extends Command {
 
         counter++;
 
-        defaultFlipping(action);
-
         System.out.println("Counter : " + counter);
         if (counter % 20 == 0) {
 
             running = false;
             stoppable = true;
-            spriteAnimation.resetIndex();
+            //spriteAnimation.resetIndex();
             character.setCurrentAction(action);
         }
 

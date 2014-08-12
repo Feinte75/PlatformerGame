@@ -13,9 +13,9 @@ import java.io.FileReader;
  */
 public class TeleportAction extends Command {
 
-    public TeleportAction(String entityName, String actionIdentifier, String category) {
+    public TeleportAction() {
 
-        super(entityName, actionIdentifier, category);
+        super();
 
         FileReader fileReader = null;
 
@@ -36,7 +36,7 @@ public class TeleportAction extends Command {
     public void stop(GameActor character) {
 
         if (stoppable) {
-            spriteAnimation.resetIndex();
+            //spriteAnimation.resetIndex();
             super.stop(character);
         }
     }
@@ -59,8 +59,6 @@ public class TeleportAction extends Command {
         }
 
         counter++;
-
-        defaultFlipping(action);
 
         System.out.println("Counter : " + counter);
         if (counter % loadTime == 0) {
@@ -91,7 +89,7 @@ public class TeleportAction extends Command {
             }
             running = false;
             stoppable = true;
-            spriteAnimation.resetIndex();
+            //spriteAnimation.resetIndex();
             character.setCurrentAction(action);
         }
 

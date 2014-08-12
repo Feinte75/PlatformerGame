@@ -5,9 +5,9 @@ import world.GameActor;
 
 public class MoveAction extends Command {
 
-    public MoveAction(String entityName, String actionIdentifier, String category) {
+    public MoveAction() {
 
-        super(entityName, actionIdentifier, category);
+        super();
         stoppable = true;
     }
 
@@ -19,14 +19,13 @@ public class MoveAction extends Command {
 
     @Override
     public void stop(GameActor character) {
+        System.out.println("stop");
         character.updateVelocity(0, 0);
         super.stop(character);
     }
 
     @Override
     public void execute(GameActor character, CharacterAction action) {
-
-        defaultFlipping(action);
 
         switch (action) {
             case MOVERIGHT:

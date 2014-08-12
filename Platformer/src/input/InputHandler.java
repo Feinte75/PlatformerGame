@@ -136,7 +136,7 @@ public class InputHandler {
             } else inputMap.put(Input.ATTACK, State.KEYPRESSED);
         } else if (keyboardInput == attackReleased) inputMap.put(Input.ATTACK, State.KEYRELEASED);
 
-        /*for(Entry<Input, State> e : inputMap.entrySet()){
+        /*for(Map.Entry<Input, State> e : inputMap.entrySet()){
             System.out.println(""+e.getKey()+" -> "+e.getValue());
         }*/
     }

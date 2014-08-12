@@ -3,7 +3,7 @@ package world;
 import java.awt.*;
 
 /**
- * Created by Glenn on 12/08/2014.
+ * Tilemap used to diplay and compute collision with environment
  */
 public class Tilemap {
 
@@ -32,9 +32,9 @@ public class Tilemap {
 
     public boolean collisionDetection(Rectangle hitbox) {
 
-        if (hitbox.intersects(new Rectangle(480, 460, 20, 40))) collide = true;
+/*        if (hitbox.intersects(new Rectangle(480, 460, 20, 40))) collide = true;
         else collide = false;
-
+*/
         return collide;
     }
 

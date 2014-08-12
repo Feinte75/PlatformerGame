@@ -110,13 +110,12 @@ public class DrawingCanvas extends JPanel implements Runnable {
 
         CharacterAction action = inputHandler.handleInput();
 
-
         //System.out.println("Commande : " +action);
         character.handleInput(action);
 
         character.update(gravity);
         character.handleCollision();
-        tilemap.collisionDetection(character.getActiveHitbox());
+        //tilemap.collisionDetection(character.getActiveHitbox());
     }
 
     /**

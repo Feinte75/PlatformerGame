@@ -1,9 +1,13 @@
 package world;
 
 import action.*;
+import graphic.SpriteAnimation;
 
 import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
+import java.util.HashMap;
 
 /**
  * MainCharacter class
@@ -16,20 +20,34 @@ public class MainCharacter extends GameActor {
         this.y = y;
         this.velocityX = velocityX;
         this.velocityY = velocityY;
+        this.onGround = true;
+
+        actionAnimations = new HashMap<Command, SpriteAnimation>();
 
         name = "kabuto";
-        move = new MoveAction(name, "move", "characters");
-        jump = new JumpAction(name, "jump", "characters");
-        idle = new IdleAction(name, "idle", "characters");
-        attack = new AttackAction(name, "attack", "characters");
-        specialAction1 = new TeleportAction(name, "specialaction1", "characters");
-        currentAction = idle;
+        move = new MoveAction();
+        actionAnimations.put(move, new SpriteAnimation(name, "move", "characters"));
 
+        jump = new JumpAction();
+        actionAnimations.put(jump, new SpriteAnimation(name, "jump", "characters"));
+
+        idle = new IdleAction();
+        actionAnimations.put(idle, new SpriteAnimation(name, "idle", "characters"));
+
+        attack = new AttackAction();
+        actionAnimations.put(attack, new SpriteAnimation(name, "attack", "characters"));
+
+        specialAction1 = new TeleportAction();
+        actionAnimations.put(specialAction1, new SpriteAnimation(name, "specialaction1", "characters"));
+
+        currentAction = idle;
+        currentAnimation = actionAnimations.get(currentAction);
     }
 
     public void update(float gravity) {
 
         currentAction.update();
+        currentAnimation.update();
 
         velocityY += gravity;
 
@@ -59,6 +77,7 @@ public class MainCharacter extends GameActor {
             currentAction.stop(this);
             action = CharacterAction.DEFAULT;
         }
+        defaultFlipping(action);
         currentAction.execute(this, action);
     }
 
@@ -71,7 +90,60 @@ public class MainCharacter extends GameActor {
     @Override
     public BufferedImage render() {
 
-        return currentAction.getActiveImage();
+        return getActiveImage();
+    }
+
+
+    public BufferedImage getActiveImage() {
+
+        return currentAction.isFlipped() ? flipImage(currentAnimation.getActiveImage()) : currentAnimation.getActiveImage();
+    }
+
+    /**
+     * Update flip variable according to the action param
+     *
+     * @param action
+     */
+    public void defaultFlipping(CharacterAction action) {
+
+        switch (action) {
+            case DEFAULT:
+                break;
+            case IDLE:
+                break;
+            case ATTACK:
+                break;
+            case MOVELEFT:
+                currentAction.setFlip(true);
+                break;
+            case JUMPLEFT:
+                currentAction.setFlip(true);
+                break;
+            case JUMPRIGHT:
+                currentAction.setFlip(false);
+                break;
+            case MOVERIGHT:
+                currentAction.setFlip(false);
+                break;
+            case JUMP:
+                break;
+        }
+    }
+
+    /**
+     * Flip image
+     *
+     * @param original image to flip
+     * @return Flipped image
+     */
+    public BufferedImage flipImage(BufferedImage original) {
+
+        AffineTransform tx = AffineTransform.getScaleInstance(-1, 1);
+        tx.translate(-original.getWidth(), 0);
+        AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+        original = op.filter(original, null);
+
+        return original;
     }
 
     @Override

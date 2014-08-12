@@ -6,10 +6,9 @@ import world.GameActor;
 public class JumpAction extends Command {
 
 
-    public JumpAction(String entityName, String actionIdentifier, String category) {
+    public JumpAction() {
 
-        super(entityName, actionIdentifier, category);
-        stoppable = true;
+        super();
     }
 
     public void updateVelocity(int dx, int dy) {
@@ -27,8 +26,6 @@ public class JumpAction extends Command {
 
     @Override
     public void execute(GameActor character, CharacterAction action) {
-
-        defaultFlipping(action);
 
         switch (action) {
             case JUMPRIGHT:

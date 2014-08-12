@@ -8,15 +8,13 @@ import world.GameActor;
  */
 public class IdleAction extends Command {
 
-    public IdleAction(String entityName, String actionIdentifier, String category) {
+    public IdleAction() {
 
-        super(entityName, actionIdentifier, category);
+        super();
     }
 
     @Override
     public void execute(GameActor character, CharacterAction action) {
-
-        defaultFlipping(action);
 
         character.updateVelocity(0, 0);
         character.setCurrentAction(action);

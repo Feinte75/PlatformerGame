@@ -1,12 +1,7 @@
 package action;
 
-import graphic.SpriteAnimation;
 import world.CharacterAction;
 import world.GameActor;
-
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
-import java.awt.image.BufferedImage;
 
 /**
  * Created by Glenn on 15/06/2014.
@@ -21,23 +16,16 @@ public abstract class Command {
     protected boolean running = false;
     protected int counter = 0;
     protected int loadTime = 0;
-    protected SpriteAnimation spriteAnimation;
 
-    public Command(String entityName, String actionIdentifier, String category) {
+    public Command() {
 
-        spriteAnimation = new SpriteAnimation(entityName, actionIdentifier, category);
     }
 
     // MainCharacter can change to a more global type like "GameActor"
     public abstract void execute(GameActor character, CharacterAction action);
 
-    public BufferedImage getActiveImage() {
-
-        return flip ? flipImage(spriteAnimation.getActiveImage()) : spriteAnimation.getActiveImage();
-    }
 
     public void update() {
-        spriteAnimation.update();
 
         /*LinkedList<Rectangle> test = spriteAnimation.getActiveBoundingBoxes();
         System.out.println(test.getFirst().toString());*/
@@ -53,50 +41,12 @@ public abstract class Command {
         return stoppable;
     }
 
-    /**
-     * Update flip variable according to the action param
-     * @param action
-     */
-    public void defaultFlipping(CharacterAction action) {
-
-        switch (action) {
-            case DEFAULT:
-                break;
-            case IDLE:
-                break;
-            case ATTACK:
-                break;
-            case MOVELEFT:
-                flip = true;
-                break;
-            case JUMPLEFT:
-                flip = true;
-                break;
-            case JUMPRIGHT:
-                flip = false;
-                break;
-            case MOVERIGHT:
-                flip = false;
-                break;
-            case JUMP:
-                break;
-        }
+    public void setFlip(boolean flip) {
+        this.flip = flip;
     }
 
-    /**
-     * Flip image
-     *
-     * @param original image to flip
-     * @return Flipped image
-     */
-    public BufferedImage flipImage(BufferedImage original) {
-
-        AffineTransform tx = AffineTransform.getScaleInstance(-1, 1);
-        tx.translate(-original.getWidth(), 0);
-        AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
-        original = op.filter(original, null);
-
-        return original;
+    public boolean isFlipped() {
+        return flip;
     }
 
 }

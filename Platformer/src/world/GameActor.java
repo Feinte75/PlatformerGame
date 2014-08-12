@@ -1,9 +1,11 @@
 package world;
 
 import action.Command;
+import graphic.SpriteAnimation;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.HashMap;
 
 /**
  * Created by Glenn on 19/06/2014.
@@ -17,6 +19,7 @@ public abstract class GameActor {
     protected float velocityX, velocityY;
     protected boolean onGround;
     protected Command currentAction;
+    protected SpriteAnimation currentAnimation;
     protected Command move;
     protected Command jump;
     protected Command idle;
@@ -24,9 +27,8 @@ public abstract class GameActor {
     protected Command specialAction1;
     protected Command specialAction2;
     protected Command specialAction3;
+    protected HashMap<Command, SpriteAnimation> actionAnimations;
     String name;
-
-
 
     public abstract BufferedImage render();
 
@@ -50,31 +52,28 @@ public abstract class GameActor {
 
         switch (action) {
             case MOVERIGHT:
-                currentAction = move;
-                break;
             case MOVELEFT:
                 currentAction = move;
+                currentAnimation = actionAnimations.get(currentAction);
                 break;
             case JUMP:
-                currentAction = jump;
-                break;
             case JUMPLEFT:
-                currentAction = jump;
-                break;
             case JUMPRIGHT:
                 currentAction = jump;
+                currentAnimation = actionAnimations.get(currentAction);
                 break;
             case ATTACK:
                 currentAction = attack;
+                currentAnimation = actionAnimations.get(currentAction);
                 break;
             case SPECIALACTION1:
                 currentAction = specialAction1;
+                currentAnimation = actionAnimations.get(currentAction);
                 break;
             case IDLE:
-                currentAction = idle;
-                break;
             default:
                 currentAction = idle;
+                currentAnimation = actionAnimations.get(currentAction);
                 break;
         }
         //System.out.println(""+currentAction);

@@ -11,5 +11,5 @@ public enum State {
 
     KEYJUSTRELEASED,
 
-    KEYRELEASED;
+    KEYRELEASED
 }
