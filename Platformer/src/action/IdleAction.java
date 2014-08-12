@@ -8,9 +8,9 @@ import world.GameActor;
  */
 public class IdleAction extends Command {
 
-    public IdleAction(String name, String identifier) {
+    public IdleAction(String entityName, String actionIdentifier, String category) {
 
-        super(name, identifier);
+        super(entityName, actionIdentifier, category);
     }
 
     @Override

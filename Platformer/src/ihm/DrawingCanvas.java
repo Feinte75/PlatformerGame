@@ -3,6 +3,7 @@ package ihm;
 import input.InputHandler;
 import world.CharacterAction;
 import world.MainCharacter;
+import world.Tilemap;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -23,6 +24,8 @@ public class DrawingCanvas extends JPanel implements Runnable {
     private BufferedImage bufferImage;
     private BufferedImage background;
 
+    private Tilemap tilemap;
+
     public DrawingCanvas(Dimension size) {
 
         setSize(size);
@@ -33,7 +36,7 @@ public class DrawingCanvas extends JPanel implements Runnable {
         inputHandler = new InputHandler(this, character);
         BufferedImage img = null;
         try {
-            img = ImageIO.read(new File("Platformer/res/bridge_background.png"));
+            img = ImageIO.read(new File("Platformer/res/backgrounds/bridge_background.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -42,6 +45,7 @@ public class DrawingCanvas extends JPanel implements Runnable {
         background.getGraphics().drawImage(bg, 0, 0, null);
         background.getGraphics().dispose();
 
+        tilemap = new Tilemap();
     }
 
     /**
@@ -112,6 +116,7 @@ public class DrawingCanvas extends JPanel implements Runnable {
 
         character.update(gravity);
         character.handleCollision();
+        tilemap.collisionDetection(character.getActiveHitbox());
     }
 
     /**
@@ -129,9 +134,11 @@ public class DrawingCanvas extends JPanel implements Runnable {
         g2D.setColor(Color.CYAN);
         g2D.fillRect(0, 0, this.getWidth(), this.getHeight());
 
-        g2D.drawImage(background, null, 0, 0);
+        //g2D.drawImage(background, null, 0, 0);
 
-        g2D.drawImage(character.render(), null, character.getX(), character.getY());
+        tilemap.renderTiles(g2D);
+
+        g2D.drawImage(character.render(), null, character.getX() - 10, character.getY() - 40); // minus to adapt to screen coordinate
 
         g2D.dispose();
     }

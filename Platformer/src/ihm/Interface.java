@@ -1,10 +1,9 @@
 package ihm;
 
-import java.awt.Dimension;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-
-import javax.swing.JFrame;
 
 public class Interface extends JFrame {
 
@@ -13,8 +12,8 @@ public class Interface extends JFrame {
 	public Interface(){
 		
 		setTitle("Platformer");
-		setPreferredSize(new Dimension(800,600));
-		setVisible(true);
+        setPreferredSize(new Dimension(900, 700));
+        setVisible(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		drawingCanvas = new DrawingCanvas(getSize());

@@ -6,9 +6,9 @@ import world.GameActor;
 public class JumpAction extends Command {
 
 
-    public JumpAction(String name, String identifier) {
+    public JumpAction(String entityName, String actionIdentifier, String category) {
 
-        super(name, identifier);
+        super(entityName, actionIdentifier, category);
         stoppable = true;
     }
 

@@ -8,9 +8,9 @@ import world.GameActor;
  */
 public class AttackAction extends Command {
 
-    public AttackAction(String name, String identifier) {
+    public AttackAction(String entityName, String actionIdentifier, String category) {
 
-        super(name, identifier);
+        super(entityName, actionIdentifier, category);
         stoppable = true;
     }
 

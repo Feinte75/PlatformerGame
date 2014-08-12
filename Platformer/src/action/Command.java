@@ -16,16 +16,16 @@ import java.awt.image.BufferedImage;
 public abstract class Command {
 
     protected static boolean flip = false;
-    protected SpriteAnimation spriteAnimation;
     protected int dx = 0, dy = 0;
     protected boolean stoppable = true;
     protected boolean running = false;
     protected int counter = 0;
     protected int loadTime = 0;
+    protected SpriteAnimation spriteAnimation;
 
-    public Command(String name, String identifier) {
+    public Command(String entityName, String actionIdentifier, String category) {
 
-        spriteAnimation = new SpriteAnimation(name, identifier);
+        spriteAnimation = new SpriteAnimation(entityName, actionIdentifier, category);
     }
 
     // MainCharacter can change to a more global type like "GameActor"

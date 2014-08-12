@@ -2,6 +2,7 @@ package world;
 
 import action.Command;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 
 /**
@@ -25,17 +26,11 @@ public abstract class GameActor {
     protected Command specialAction3;
     String name;
 
-    /*public abstract void jump(Movement movement);
 
-    public abstract void startMoving(Movement movement);
 
-    public abstract void stopMoving(Movement movement);
-
-    public abstract void startSpecialAction1(CharacterAction action);
-
-    public abstract void stopSpecialAction1(CharacterAction action);
-    */
     public abstract BufferedImage render();
+
+    public abstract Rectangle getActiveHitbox();
 
     public void updatePosition(int dx, int dy) {
 
@@ -93,23 +88,4 @@ public abstract class GameActor {
         this.onGround = onGround;
     }
 
-    /*
-    public BufferedImage getMoveImage() {
-
-        return move.getActiveImage();
-    }
-
-    public BufferedImage getJumpImage() {
-
-        return jump.getActiveImage();
-    }
-
-    public BufferedImage getIdleImage() {
-
-        return idle.getActiveImage();
-    }
-
-    public Movement getMovement() {
-        return movement;
-    }*/
 }

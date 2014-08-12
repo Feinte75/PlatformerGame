@@ -23,26 +23,33 @@ import java.util.LinkedList;
 public class SpriteAnimation {
 
     protected LinkedList<BufferedImage> images;
-    protected HashMap<Integer, LinkedList<Rectangle>> boundingBoxes;
+    protected HashMap<Integer, LinkedList<Rectangle>> hitBox;
+
     protected int index = 0;
     protected int counter = 0;
     protected int animationSpeed;
 
-    public SpriteAnimation(String name, String identifier) {
+    public SpriteAnimation(String entityName, String actionIdentifier, String category) {
 
         images = new LinkedList<BufferedImage>();
-        boundingBoxes = new HashMap<Integer, LinkedList<Rectangle>>();
+        hitBox = new HashMap<Integer, LinkedList<Rectangle>>();
         //images = ss.getAnimation(identifier);
-        loadImages(name, identifier);
-        this.animationSpeed = animationSpeed;
+        loadImages(entityName, actionIdentifier, category);
     }
 
-    public void loadImages(String character, String action) {
+    /**
+     * Load every images of the animation
+     *
+     * @param entityName       The name of the entity to load, it can be a character name, a powerball etc
+     * @param actionIdentifier The name of the action to load for the specified entityName, for example, the special action of the character kabuto
+     * @param category         The entity's category. characters, effect, power
+     */
+    public void loadImages(String entityName, String actionIdentifier, String category) {
 
         FileReader fileReader = null;
 
         try {
-            fileReader = new FileReader("Platformer/conf/characters/" + character + ".json");
+            fileReader = new FileReader("Platformer/conf/" + category + "/" + entityName + ".json");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -52,13 +59,13 @@ public class SpriteAnimation {
 
         // Get images sprite sheet
         try {
-            spriteSheet = ImageIO.read(new File("Platformer/res/" + jsonObject.getString("spritesheet") + ".png"));
+            spriteSheet = ImageIO.read(new File("Platformer/res/" + category + "/" + jsonObject.getString("spritesheet") + ".png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         // Extract animation speed
-        JSONObject actionLoaded = jsonObject.getJSONObject("animations").getJSONObject(action);
+        JSONObject actionLoaded = jsonObject.getJSONObject("animations").getJSONObject(actionIdentifier);
         animationSpeed = actionLoaded.getInt("animationspeed");
 
         JSONObject loadedImages = actionLoaded.getJSONObject("images");
@@ -76,7 +83,7 @@ public class SpriteAnimation {
                 break;
             }
             boxes = new LinkedList<Rectangle>();
-            boundingBoxes.put(i - 1, boxes);
+            hitBox.put(i - 1, boxes);
             x = imageDelimitors.getInt(0);
             y = imageDelimitors.getInt(1);
             width = imageDelimitors.getInt(2);
@@ -104,7 +111,7 @@ public class SpriteAnimation {
         return images.get(index);
     }
 
-    public LinkedList<Rectangle> getActiveBoundingBoxes() {
-        return boundingBoxes.get(index);
+    public LinkedList<Rectangle> getActiveHitBox() {
+        return hitBox.get(index);
     }
 }
