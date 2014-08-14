@@ -23,7 +23,7 @@ import java.util.LinkedList;
 public class SpriteAnimation {
 
     protected LinkedList<BufferedImage> images;
-    protected HashMap<Integer, LinkedList<Rectangle>> hitBox;
+    protected HashMap<Integer, Rectangle> hitBox;
 
     protected int index = 0;
     protected int counter = 0;
@@ -32,7 +32,7 @@ public class SpriteAnimation {
     public SpriteAnimation(String entityName, String actionIdentifier, String category) {
 
         images = new LinkedList<BufferedImage>();
-        hitBox = new HashMap<Integer, LinkedList<Rectangle>>();
+        hitBox = new HashMap<Integer, Rectangle>();
         //images = ss.getAnimation(identifier);
         loadImages(entityName, actionIdentifier, category);
     }
@@ -74,7 +74,7 @@ public class SpriteAnimation {
         int x, y, width, height;
         int i = 1;
         JSONArray imageDelimitors = null;
-        LinkedList<Rectangle> boxes;
+        Rectangle box;
         while (true) {
 
             try {
@@ -82,15 +82,15 @@ public class SpriteAnimation {
             } catch (JSONException e) {
                 break;
             }
-            boxes = new LinkedList<Rectangle>();
-            hitBox.put(i - 1, boxes);
+
+
             x = imageDelimitors.getInt(0);
             y = imageDelimitors.getInt(1);
             width = imageDelimitors.getInt(2);
             height = imageDelimitors.getInt(3);
 
             // TODO : add bounding boxes in json files
-            boxes.add(new Rectangle(x, y, width, height));
+            hitBox.put(i - 1, new Rectangle(x, y, width, height));
             images.add(spriteSheet.getSubimage(x, y, width, height));
             i++;
         }
@@ -111,7 +111,7 @@ public class SpriteAnimation {
         return images.get(index);
     }
 
-    public LinkedList<Rectangle> getActiveHitBox() {
+    public Rectangle getActiveHitBox() {
         return hitBox.get(index);
     }
 }

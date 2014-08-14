@@ -54,18 +54,10 @@ public class MainCharacter extends GameActor {
         y += velocityY;
         x += velocityX;
 
-        /*if(velocityX > 0) velocityX--;
-        else if(velocityX < 0) velocityX++;*/
-
-        if (y > 500) {
-            y = 500;
-            onGround = true;
+        /*if (onGround) {
             velocityY = 0;
-        }
+        }*/
 
-        //System.out.println(movement);
-        //if (onGround && currentAction == jump)
-        //  currentAction = idle;
     }
 
     @Override
@@ -148,7 +140,9 @@ public class MainCharacter extends GameActor {
 
     @Override
     public Rectangle getActiveHitbox() {
-        return null;
+        Rectangle temp = currentAnimation.getActiveHitBox();
+        temp.setLocation(x, (int) (y - temp.getHeight()));
+        return temp;
     }
 
     public int getX() {

@@ -87,4 +87,11 @@ public abstract class GameActor {
         this.onGround = onGround;
     }
 
+    public float getVelocityX() {
+        return velocityX;
+    }
+
+    public float getVelocityY() {
+        return velocityY;
+    }
 }

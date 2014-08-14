@@ -26,12 +26,15 @@ public class DrawingCanvas extends JPanel implements Runnable {
 
     private Tilemap tilemap;
 
+    // Fps display
+    private int ticks, fps;
+
     public DrawingCanvas(Dimension size) {
 
         setSize(size);
         setVisible(true);
 
-        character = new MainCharacter(50, 500, 0f, 0.0f);
+        character = new MainCharacter(50, 400, 0f, 0.0f);
 
         inputHandler = new InputHandler(this, character);
         BufferedImage img = null;
@@ -78,6 +81,8 @@ public class DrawingCanvas extends JPanel implements Runnable {
             frames++;
             if (System.currentTimeMillis() - timer > 1000) { // reset every second
                 timer += 1000;
+                ticks = updates;
+                fps = frames;
                 //System.out.println(updates + "Ticks, Fps" + frames);
                 updates = 0;
                 frames = 0;
@@ -89,7 +94,7 @@ public class DrawingCanvas extends JPanel implements Runnable {
     /**
      * Ensure that the game loop runs at good fps by sleeping if game loop was finished to quickly
      *
-     * @param cycleTime
+     * @param cycleTime elapsed time since the beginning of the cycle
      * @return
      */
     public long synchroFramerate(Long cycleTime) {
@@ -104,18 +109,49 @@ public class DrawingCanvas extends JPanel implements Runnable {
     }
 
     /**
-     * Compute AI and update the world
+     * Updates the world : character, ennemies. Compute AI. Handle collision
      */
     public void tick() {
 
+        /*
+        *   Input handling
+        */
         CharacterAction action = inputHandler.handleInput();
-
-        //System.out.println("Commande : " +action);
         character.handleInput(action);
 
+        /*
+         *  Gravity
+         */
         character.update(gravity);
-        character.handleCollision();
-        //tilemap.collisionDetection(character.getActiveHitbox());
+
+        /*
+        *   Collision with environment
+        */
+
+        //character.handleCollision();
+        Rectangle temp = character.getActiveHitbox();
+        Point p = tilemap.collisionDetection(temp);
+
+        System.out.println("X : " + character.getX() + " Y : " + character.getY() + " Velocity X :"
+                        + character.getVelocityX() + " Velocity Y:" + character.getVelocityY()
+                        + " Correction position X : " + p.getX() + " Correction position Y : " + p.getY()
+                        + " point precedent : " + temp.getLocation() + " nouveau point : " + p
+        );
+
+        if (!p.equals(temp.getLocation())) {
+            character.setX((int) p.getX());
+            character.setY((int) p.getY() + (int) temp.getHeight());
+            character.setOnGround(true);
+            tilemap.setCollide(true);
+        } else {
+            character.setOnGround(false);
+            tilemap.setCollide(false);
+        }
+
+        /*
+        *   Collision with moving entities
+        */
+        // TODO
     }
 
     /**
@@ -136,7 +172,8 @@ public class DrawingCanvas extends JPanel implements Runnable {
         //g2D.drawImage(background, null, 0, 0);
 
         tilemap.renderTiles(g2D);
-
+        g2D.setFont(new Font(null, Font.ITALIC, 25));
+        g2D.drawString(fps + ": Fps , Ticks :" + ticks, 600, 550);
         g2D.drawImage(character.render(), null, character.getX() - 10, character.getY() - 40); // minus to adapt to screen coordinate
 
         g2D.dispose();

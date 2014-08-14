@@ -19,7 +19,7 @@ public class MoveAction extends Command {
 
     @Override
     public void stop(GameActor character) {
-        System.out.println("stop");
+
         character.updateVelocity(0, 0);
         super.stop(character);
     }
@@ -35,7 +35,6 @@ public class MoveAction extends Command {
                 character.updateVelocity(-7, 0);
                 return;
         }
-
         character.setCurrentAction(action);
     }
 

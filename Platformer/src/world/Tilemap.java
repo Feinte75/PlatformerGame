@@ -1,6 +1,7 @@
 package world;
 
 import java.awt.*;
+import java.util.LinkedList;
 
 /**
  * Tilemap used to diplay and compute collision with environment
@@ -9,11 +10,29 @@ public class Tilemap {
 
     private Tiles[][] tiles;
     private boolean collide;
+    private LinkedList<CollisionData> collisionData;
 
     public Tilemap() {
+
+        collisionData = new LinkedList<CollisionData>();
+
         tiles = new Tiles[41][25];
         tiles[24][23] = Tiles.WALL;
         tiles[24][24] = Tiles.WALL;
+        tiles[10][20] = Tiles.WALL;
+        tiles[11][20] = Tiles.WALL;
+        tiles[24][24] = Tiles.WALL;
+
+        for (int i = 0; i <= 40; i++) {
+            tiles[i][0] = Tiles.WALL;
+            tiles[i][24] = Tiles.WALL;
+
+            if (i < 25) {
+                tiles[0][i] = Tiles.WALL;
+                tiles[40][i] = Tiles.WALL;
+            }
+        }
+
     }
 
     public void renderTiles(Graphics2D graphics2D) {
@@ -30,12 +49,33 @@ public class Tilemap {
         }
     }
 
-    public boolean collisionDetection(Rectangle hitbox) {
+    //LinkedList<CollisionData>
+    public Point collisionDetection(Rectangle hitbox) {
 
-/*        if (hitbox.intersects(new Rectangle(480, 460, 20, 40))) collide = true;
-        else collide = false;
-*/
-        return collide;
+        collisionData.clear();
+        Rectangle copy = (Rectangle) hitbox.clone();
+        for (int i = 0; i <= 40; i++) {
+            for (int j = 0; j <= 24; j++) {
+
+                if (tiles[i][j] == Tiles.WALL) {
+
+                    Rectangle temp = new Rectangle(i * 20, j * 20, 20, 20);
+                    if (copy.intersects(temp)) {
+
+                        while (temp.getY() - copy.getY() < (int) copy.getHeight()) {
+                            copy.translate(0, -1);
+                        }
+                        while (copy.getY() - temp.getY() > (int) copy.getHeight()) {
+                            copy.translate(0, 1);
+                        }
+                    }
+                }
+            }
+        }
+        return copy.getLocation();
     }
 
+    public void setCollide(boolean collide) {
+        this.collide = collide;
+    }
 }
