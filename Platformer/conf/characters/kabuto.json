@@ -1,0 +1,56 @@
+{
+	"healthpoint": 100,
+	
+	"spritesheet": "sprite_sheet_kabuto",
+	
+	"animations": {
+	
+	"move": {
+		"name": "moveaction",
+		"animationspeed": 10,
+		"images": {
+			"1": [1, 49, 42, 34],
+			"2": [46, 49, 41, 34],
+			"3": [90, 49, 31, 34],
+			"4": [124, 49, 36, 34],
+			"5": [163, 49, 35, 34],
+			"6": [201, 49, 35, 34]
+		}
+	},
+	"jump": {
+		"name": "jumpaction",
+		"animationspeed": 10,
+		"images": {
+			"1": [1, 1, 27, 45]
+		}
+	},
+	"idle": {
+		"name": "idleaction",
+		"animationspeed": 10,
+		"images": {
+			"1": [1, 86, 16, 44]
+		}
+	},
+	"attack": {
+	    "name": "attackaction",
+	    "animationspeed": 5,
+	    "images": {
+	        "1": [1, 173, 21, 39],
+	        "2": [25, 173, 29, 39],
+	        "3": [57, 173, 47, 39],
+	        "4": [107, 173, 41, 39]
+	    }
+	},
+	"specialaction1": {
+		"name": "teleportaction",
+		"animationspeed": 16,
+		"images": {
+			"1": [1, 133, 26, 37],
+			"2": [30, 133, 25, 37],
+			"3": [58, 129, 24, 41],
+			"4": [86, 122, 26, 48]
+		}
+	}
+	
+	}
+}
