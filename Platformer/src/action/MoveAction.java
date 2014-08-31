@@ -11,12 +11,6 @@ public class MoveAction extends Command {
         stoppable = true;
     }
 
-    public void updateVelocity(int dx, int dy) {
-
-        this.dx = dx;
-        this.dy = dy;
-    }
-
     @Override
     public void stop(GameActor character) {
 
@@ -29,10 +23,10 @@ public class MoveAction extends Command {
 
         switch (action) {
             case MOVERIGHT:
-                character.updateVelocity(7, 0);
+                character.updateVelocity(2, 0);
                 return;
             case MOVELEFT:
-                character.updateVelocity(-7, 0);
+                character.updateVelocity(-2, 0);
                 return;
         }
         character.setCurrentAction(action);

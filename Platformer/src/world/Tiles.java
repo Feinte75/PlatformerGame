@@ -6,5 +6,8 @@ package world;
 public enum Tiles {
 
     WALL,
-    EMPTY,
+    WALLCOLLIDE,
+    EMPTY;
+
+
 }

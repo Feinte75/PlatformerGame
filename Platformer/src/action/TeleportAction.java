@@ -95,10 +95,4 @@ public class TeleportAction extends Command {
 
 
     }
-
-    @Override
-    public void updateVelocity(int dx, int dy) {
-
-
-    }
 }

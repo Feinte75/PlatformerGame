@@ -16,7 +16,7 @@ import java.util.HashMap;
 public abstract class GameActor {
 
     protected int x, y;
-    protected float velocityX, velocityY;
+    protected int velocityX, velocityY;
     protected boolean onGround;
     protected Command currentAction;
     protected SpriteAnimation currentAnimation;
@@ -42,8 +42,8 @@ public abstract class GameActor {
 
     public void updateVelocity(int dx, int dy) {
 
-        this.velocityX = dx;
-        this.velocityY = dy;
+        this.velocityX += dx;
+        this.velocityY += dy;
     }
 
     public abstract void handleInput(CharacterAction action);
@@ -87,11 +87,19 @@ public abstract class GameActor {
         this.onGround = onGround;
     }
 
-    public float getVelocityX() {
+    public int getVelocityX() {
         return velocityX;
     }
 
-    public float getVelocityY() {
+    public void setVelocityX(int velocityX) {
+        this.velocityX = velocityX;
+    }
+
+    public int getVelocityY() {
         return velocityY;
+    }
+
+    public void setVelocityY(int velocityY) {
+        this.velocityY = velocityY;
     }
 }

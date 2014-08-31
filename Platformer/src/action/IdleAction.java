@@ -21,11 +21,6 @@ public class IdleAction extends Command {
     }
 
     @Override
-    public void updateVelocity(int dx, int dy) {
-
-    }
-
-    @Override
     public boolean isStoppable() {
         return true;
     }
