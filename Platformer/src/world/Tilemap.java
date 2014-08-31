@@ -21,6 +21,10 @@ public class Tilemap {
         tiles[24][24] = Tiles.WALL;
         tiles[10][20] = Tiles.WALL;
         tiles[11][20] = Tiles.WALL;
+        tiles[12][20] = Tiles.WALL;
+        tiles[10][19] = Tiles.WALL;
+        tiles[11][19] = Tiles.WALL;
+        tiles[12][19] = Tiles.WALL;
         tiles[24][24] = Tiles.WALL;
 
         for (int i = 0; i <= 40; i++) {
@@ -40,11 +44,14 @@ public class Tilemap {
         graphics2D.setColor(Color.BLACK);
         for (int i = 0; i <= 40; i++) {
             for (int j = 0; j <= 24; j++) {
-                if (collide) graphics2D.setColor(Color.RED);
-                else graphics2D.setColor(Color.BLACK);
 
-                if (tiles[i][j] == Tiles.WALL) graphics2D.fillRect(i * 20, j * 20, 20, 20);
-                else graphics2D.drawRect(i * 20, j * 20, 20, 20);
+                if (tiles[i][j] == Tiles.WALL) {
+                    graphics2D.setColor(Color.BLACK);
+                    graphics2D.fillRect(i * 20, j * 20, 20, 20);
+                } else if (tiles[i][j] == Tiles.WALLCOLLIDE) {
+                    graphics2D.setColor(Color.RED);
+                    graphics2D.fillRect(i * 20, j * 20, 20, 20);
+                } else graphics2D.drawRect(i * 20, j * 20, 20, 20);
             }
         }
     }
@@ -62,12 +69,6 @@ public class Tilemap {
                     Rectangle temp = new Rectangle(i * 20, j * 20, 20, 20);
                     if (copy.intersects(temp)) {
 
-                        while (temp.getY() - copy.getY() < (int) copy.getHeight()) {
-                            copy.translate(0, -1);
-                        }
-                        while (copy.getY() - temp.getY() > (int) copy.getHeight()) {
-                            copy.translate(0, 1);
-                        }
                     }
                 }
             }
@@ -77,5 +78,9 @@ public class Tilemap {
 
     public void setCollide(boolean collide) {
         this.collide = collide;
+    }
+
+    public Tiles[][] getTiles() {
+        return tiles;
     }
 }

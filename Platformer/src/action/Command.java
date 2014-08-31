@@ -35,8 +35,6 @@ public abstract class Command {
         if (isStoppable()) character.setCurrentAction(CharacterAction.IDLE);
     }
 
-    public abstract void updateVelocity(int dx, int dy);
-
     public boolean isStoppable() {
         return stoppable;
     }

@@ -15,7 +15,7 @@ import java.util.HashMap;
  */
 public class MainCharacter extends GameActor {
 
-    public MainCharacter(int x, int y, float velocityX, float velocityY) {
+    public MainCharacter(int x, int y, int velocityX, int velocityY) {
         this.x = x;
         this.y = y;
         this.velocityX = velocityX;
@@ -24,7 +24,7 @@ public class MainCharacter extends GameActor {
 
         actionAnimations = new HashMap<Command, SpriteAnimation>();
 
-        name = "kabuto";
+        name = "naruto";
         move = new MoveAction();
         actionAnimations.put(move, new SpriteAnimation(name, "move", "characters"));
 
@@ -50,10 +50,17 @@ public class MainCharacter extends GameActor {
         currentAnimation.update();
 
         velocityY += gravity;
+        if (velocityY < -20) velocityY = -20;
+        else if (velocityY > 20) velocityY = 20;
+
+        if (velocityX > 8) velocityX = 8;
+        else if (velocityX < -8) velocityX = -8;
 
         y += velocityY;
         x += velocityX;
 
+        if (velocityX < 0) velocityX++;
+        else if (velocityX > 0) velocityX--;
         /*if (onGround) {
             velocityY = 0;
         }*/
